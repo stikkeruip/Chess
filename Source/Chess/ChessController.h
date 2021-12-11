@@ -22,4 +22,6 @@ class CHESS_API AChessController : public APlayerController
 	virtual void SetupInputComponent() override;
 
 	void OnMouseClick();
+
+	APawn* Player;
 };

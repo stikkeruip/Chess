@@ -166,6 +166,7 @@
       <workItem from="1638127329769" duration="1000" />
       <workItem from="1639167284693" duration="21000" />
       <workItem from="1639167391849" duration="2909000" />
+      <workItem from="1639224999405" duration="4561000" />
     </task>
     <servers />
   </component>
@@ -173,7 +174,7 @@
     <option name="version" value="3" />
   </component>
   <component name="UnityCheckinConfiguration" checkUnsavedScenes="true" />
-  <component name="UnityProjectConfiguration" hasMinimizedUI="null" />
+  <component name="UnityProjectConfiguration" hasMinimizedUI="false" />
   <component name="UnityUnitTestConfiguration" currentTestLauncher="NUnit" />
   <component name="VcsManagerConfiguration">
     <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="true" />

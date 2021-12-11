@@ -16,6 +16,18 @@ void AChessController::SetupInputComponent()
 
 void AChessController::OnMouseClick()
 {
-	UE_LOG(LogTemp, Warning, TEXT("clicked"));
+	FVector WorldLocation;
+	FVector WorldDirection;
+	ECollisionChannel Collision;
+	FHitResult HitResult;
+	
+	if  (DeprojectMousePositionToWorld(WorldLocation, WorldDirection))
+	{
+		UE_LOG(LogTemp, Warning, TEXT("%s"), *WorldLocation.ToString());
+	}
+	if (GetHitResultUnderCursor(Collision, true, HitResult))
+	{
+		
+	}
 }
 

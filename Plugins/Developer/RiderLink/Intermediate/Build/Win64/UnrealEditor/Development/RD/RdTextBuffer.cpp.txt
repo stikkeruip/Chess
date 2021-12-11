@@ -1,0 +1,2 @@
+C:\Users\uipko\Documents\Unreal Projects\Chess\Plugins\Developer\RiderLink\Intermediate\Build\Win64\UnrealEditor\Development\RD\Definitions.h
+C:\Users\uipko\Documents\Unreal Projects\Chess\Plugins\Developer\RiderLink\Source\RD\src\rd_gen_cpp\src\RdTextBuffer.h
