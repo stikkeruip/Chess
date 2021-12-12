@@ -19,9 +19,15 @@ void UPieceMovementComponent::BeginPlay()
 {
 	Super::BeginPlay();
 
+	TimeToMove = 2.f;
+
 	TimePassed = 0;
 
 	InitialPosition = GetOwner()->GetActorLocation();
+
+	EndPosition = InitialPosition;
+
+	bMoved = false;
 	// ...
 	
 }
@@ -33,13 +39,27 @@ void UPieceMovementComponent::TickComponent(float DeltaTime, ELevelTick TickType
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 
 	TimePassed += DeltaTime;
-
-	if (TimePassed < TimeToMove)
+	
+	if(bMoved)
 	{
-		FVector CurrentLocation = FMath::Lerp(InitialPosition, EndPosition, FMath::Clamp(TimePassed/TimeToMove, 0.0f, 1.0f));
+		if (TimePassed < TimeToMove)
+		{
+			FVector CurrentLocation = FMath::Lerp(InitialPosition, EndPosition, FMath::Clamp(TimePassed/TimeToMove, 0.0f, 1.0f));
 
-		GetOwner()->SetActorLocation(CurrentLocation);
+			GetOwner()->SetActorLocation(CurrentLocation);
+		}
+		
+		InitialPosition = GetOwner()->GetActorLocation();
+
+		bMoved = false;
+		
 	}
-	// ...
 }
+
+void UPieceMovementComponent::SetEndPosition(FVector Pos)
+{
+	EndPosition = Pos;
+}
+
+
 

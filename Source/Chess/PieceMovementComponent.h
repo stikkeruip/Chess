@@ -19,19 +19,24 @@ public:
 protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
-
-	UPROPERTY(EditAnywhere, Category = "Movement")
-	FVector EndPosition;
-
-	UPROPERTY(EditAnywhere, Category = "Movement")
+	
 	float TimeToMove;
 
 	FVector InitialPosition;
 
+	FVector EndPosition;
+
 	float TimePassed;
+
+	bool bMoved;
 
 
 public:	
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
+
+	void SetEndPosition(FVector Pos);
+
+	void Moved(){ bMoved = true;}
+	
 };

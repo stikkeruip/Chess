@@ -2,6 +2,7 @@
 
 #pragma once
 
+#include "PieceMovementComponent.h"
 #include "CoreMinimal.h"
 #include "GameFramework/PlayerController.h"
 #include "ChessController.generated.h"
@@ -17,11 +18,11 @@ class CHESS_API AChessController : public APlayerController
 
 	FVector DesiredPosition;
 
-	AActor* Piece;
-
 	virtual void SetupInputComponent() override;
 
 	void OnMouseClick();
 
 	APawn* Player;
+
+	UPieceMovementComponent* Piece;
 };
