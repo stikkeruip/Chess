@@ -25,9 +25,9 @@ void UPieceMovementComponent::BeginPlay()
 
 	InitialPosition = GetOwner()->GetActorLocation();
 
-	EndPosition = InitialPosition;
-
 	bMoved = false;
+
+	bMoving = false;
 	// ...
 	
 }
@@ -42,17 +42,18 @@ void UPieceMovementComponent::TickComponent(float DeltaTime, ELevelTick TickType
 	
 	if(bMoved)
 	{
+		bMoving = true;
 		if (TimePassed < TimeToMove)
 		{
 			FVector CurrentLocation = FMath::Lerp(InitialPosition, EndPosition, FMath::Clamp(TimePassed/TimeToMove, 0.0f, 1.0f));
 
 			GetOwner()->SetActorLocation(CurrentLocation);
 		}
-		
-		InitialPosition = GetOwner()->GetActorLocation();
-
-		bMoved = false;
-		
+		else
+		{
+			InitialPosition = GetOwner()->GetActorLocation();
+			bMoving = false;
+		}
 	}
 }
 
@@ -60,6 +61,13 @@ void UPieceMovementComponent::SetEndPosition(FVector Pos)
 {
 	EndPosition = Pos;
 }
+
+void UPieceMovementComponent::Moved()
+{
+	bMoved = true;
+	TimePassed = 0;
+}
+
 
 
 

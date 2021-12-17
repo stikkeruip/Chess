@@ -22,7 +22,7 @@ void AChessController::OnMouseClick()
 {
 	FHitResult HitResult;
 	
-	if (GetHitResultUnderCursor(ECollisionChannel::ECC_Pawn, true, HitResult))
+	if (GetHitResultUnderCursor(ECollisionChannel::ECC_Pawn, true, HitResult) && (Piece == nullptr || !Piece->GetMoving()))
 	{
 		if(HitResult.GetActor()->ActorHasTag(TEXT("Piece")))
 		{

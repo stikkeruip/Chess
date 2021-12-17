@@ -30,6 +30,8 @@ protected:
 
 	bool bMoved;
 
+	bool bMoving;
+
 
 public:	
 	// Called every frame
@@ -37,6 +39,7 @@ public:
 
 	void SetEndPosition(FVector Pos);
 
-	void Moved(){ bMoved = true;}
-	
+	void Moved();
+
+	bool GetMoving() { return bMoving; }
 };
