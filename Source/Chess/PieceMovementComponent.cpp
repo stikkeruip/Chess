@@ -3,6 +3,8 @@
 
 #include "PieceMovementComponent.h"
 
+#include "ChessRuleSubsystem.h"
+
 // Sets default values for this component's properties
 UPieceMovementComponent::UPieceMovementComponent()
 {
@@ -19,6 +21,8 @@ void UPieceMovementComponent::BeginPlay()
 {
 	Super::BeginPlay();
 
+	
+
 	TimeToMove = 2.f;
 
 	TimePassed = 0;
@@ -29,7 +33,12 @@ void UPieceMovementComponent::BeginPlay()
 
 	bMoving = false;
 	// ...
-	
+
+	UChessRuleSubsystem* ChessRuleSubsystem = GetWorld()->GetSubsystem<UChessRuleSubsystem>();
+	if(ChessRuleSubsystem)
+	{
+		PieceStateChange.AddUObject(ChessRuleSubsystem, &UChessRuleSubsystem::InstructionCompleted);
+	}
 }
 
 
@@ -53,6 +62,8 @@ void UPieceMovementComponent::TickComponent(float DeltaTime, ELevelTick TickType
 		{
 			InitialPosition = GetOwner()->GetActorLocation();
 			bMoving = false;
+			PieceState = EPieceState::PS_Unselected;
+			PieceStateChange.Broadcast(Colour, PieceState);
 		}
 	}
 }
@@ -64,8 +75,17 @@ void UPieceMovementComponent::SetEndPosition(FVector Pos)
 
 void UPieceMovementComponent::Moved()
 {
+	PieceState = EPieceState::PS_Moving;
+	PieceStateChange.Broadcast(Colour, PieceState);
+	
 	bMoved = true;
 	TimePassed = 0;
+}
+
+void UPieceMovementComponent::Selected()
+{
+	PieceState = EPieceState::PS_Selected;
+	PieceStateChange.Broadcast(Colour, PieceState);
 }
 
 

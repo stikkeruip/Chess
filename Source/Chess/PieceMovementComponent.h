@@ -6,6 +6,22 @@
 #include "Components/ActorComponent.h"
 #include "PieceMovementComponent.generated.h"
 
+UENUM()
+enum class EColour
+{
+	C_Black = 0	UMETA(DisplayName = "Black"),
+	C_White = 1	UMETA(DisplayName = "White"),
+	C_None = 2	UMETA(DisplayName = "None"),
+};
+
+UENUM()
+enum class EPieceState
+{
+	PS_Unselected = 0	UMETA(DisplayName = "Unselected"),
+	PS_Selected = 1		UMETA(DisplayName = "Selected"),
+	PS_Moving = 2		UMETA(DisplayName = "Moving"),
+};
+
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class CHESS_API UPieceMovementComponent : public UActorComponent
@@ -32,6 +48,11 @@ protected:
 
 	bool bMoving;
 
+	UPROPERTY(EditAnywhere)
+		EColour Colour;
+
+	EPieceState PieceState = static_cast<EPieceState>(0);
+
 
 public:	
 	// Called every frame
@@ -42,4 +63,10 @@ public:
 	void Moved();
 
 	bool GetMoving() { return bMoving; }
+	
+	void Selected();
+
+	DECLARE_EVENT_TwoParams(UPieceMovementComponent, EPieceStateChange, EColour Colour, EPieceState PieceState);
+
+	EPieceStateChange PieceStateChange;
 };

@@ -2,6 +2,7 @@
 
 
 #include "ChessController.h"
+#include "ChessRuleSubsystem.h"
 
 
 
@@ -27,6 +28,7 @@ void AChessController::OnMouseClick()
 		if(HitResult.GetActor()->ActorHasTag(TEXT("Piece")))
 		{
 			Piece = HitResult.GetActor()->FindComponentByClass<UPieceMovementComponent>();
+			Piece->Selected();
 			return;
 		}
 		FVector HitLocation = HitResult.GetActor()->GetActorLocation();
