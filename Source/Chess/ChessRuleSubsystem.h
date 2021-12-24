@@ -21,8 +21,9 @@ class CHESS_API UChessRuleSubsystem : public UWorldSubsystem
 public:
 	void CreateInstructionWidget(TSubclassOf<UUserWidget> InstructionWidgetClass);
 	void DisplayInstructionWidget();
+	
+	void InstructionCompleted(EColour Colour, EPieceState PieceState);
 
-	void InstructionCompleted();
 private:
 	
 	UUserWidget* InstructionWidget = nullptr;

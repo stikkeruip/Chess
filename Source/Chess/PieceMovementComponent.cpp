@@ -12,6 +12,9 @@ UPieceMovementComponent::UPieceMovementComponent()
 	// off to improve performance if you don't need them.
 	PrimaryComponentTick.bCanEverTick = true;
 
+	Colour = EColour::C_None;
+	PieceState = EPieceState::PS_Unselected;
+
 	// ...
 }
 

@@ -18,6 +18,6 @@ void UChessRuleSubsystem::DisplayInstructionWidget()
 	InstructionWidget->AddToViewport();
 }
 
-void UChessRuleSubsystem::InstructionCompleted()
+void UChessRuleSubsystem::InstructionCompleted(EColour Colour, EPieceState PieceState)
 {
 }

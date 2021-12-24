@@ -67,6 +67,7 @@ public:
 	void Selected();
 
 	DECLARE_EVENT_TwoParams(UPieceMovementComponent, EPieceStateChange, EColour Colour, EPieceState PieceState);
-
+	EPieceStateChange& OnStateChanged() { return PieceStateChange; }
+	
 	EPieceStateChange PieceStateChange;
 };
