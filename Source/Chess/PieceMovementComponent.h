@@ -11,7 +11,6 @@ enum class EColour
 {
 	C_Black = 0	UMETA(DisplayName = "Black"),
 	C_White = 1	UMETA(DisplayName = "White"),
-	C_None = 2	UMETA(DisplayName = "None"),
 };
 
 UENUM()
@@ -20,6 +19,13 @@ enum class EPieceState
 	PS_Unselected = 0	UMETA(DisplayName = "Unselected"),
 	PS_Selected = 1		UMETA(DisplayName = "Selected"),
 	PS_Moving = 2		UMETA(DisplayName = "Moving"),
+};
+
+UENUM()
+enum class EPieceType
+{
+	PT_Pawn = 0		UMETA(DisplayName = "Pawn"),
+	PT_Castle = 1	UMETA(DisplayName = "Castle"),
 };
 
 
@@ -48,8 +54,21 @@ protected:
 
 	bool bMoving;
 
+	int FinalGridX;
+	
+	int FinalGridY;
+
+	int CurrentGridX;
+	
+	int CurrentGridY;
+
+	FVector CurrentGrid;
+
 	UPROPERTY(EditAnywhere)
 		EColour Colour;
+
+	UPROPERTY(EditAnywhere)
+		EPieceType Piece_Type;
 
 	EPieceState PieceState = static_cast<EPieceState>(0);
 
@@ -65,6 +84,10 @@ public:
 	bool GetMoving() { return bMoving; }
 	
 	void Selected();
+
+	FVector GetGridPosition(FVector Pos);
+
+	bool CheckMovementValid(EPieceType PieceType, int F_X, int F_Y);
 
 	DECLARE_EVENT_TwoParams(UPieceMovementComponent, EPieceStateChange, EColour Colour, EPieceState PieceState);
 	EPieceStateChange& OnStateChanged() { return PieceStateChange; }

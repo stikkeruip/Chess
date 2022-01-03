@@ -9,7 +9,7 @@
 void UChessRuleSubsystem::CreateInstructionWidget(TSubclassOf<UUserWidget> InstructionWidgetClass)
 {
 	APlayerController* PlayerController = UGameplayStatics::GetPlayerController(GetWorld(), 0);
-	InstructionWidget = CreateWidget<UUserWidget>(PlayerController, InstructionWidgetClass);
+	InstructionWidget = CreateWidget<UInstructionUserWidget>(PlayerController, InstructionWidgetClass);
 }
 
 void UChessRuleSubsystem::DisplayInstructionWidget()
@@ -20,4 +20,14 @@ void UChessRuleSubsystem::DisplayInstructionWidget()
 
 void UChessRuleSubsystem::InstructionCompleted(EColour Colour, EPieceState PieceState)
 {
+	if(Colour == EColour::C_Black)
+	{
+		InstructionWidget->SetInstruction(TEXT("Move the black piece"));
+		//UE_LOG(LogTemp, Warning, TEXT("black"));
+	}
+	if(Colour == EColour::C_White)
+	{
+		InstructionWidget->SetInstruction(TEXT("Move the white piece"));
+		//UE_LOG(LogTemp, Warning, TEXT("white"));
+	}
 }

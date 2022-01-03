@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "InstructionUserWidget.h"
 #include "Subsystems/WorldSubsystem.h"
 
 #include "PieceMovementComponent.h"
@@ -26,7 +27,7 @@ public:
 
 private:
 	
-	UUserWidget* InstructionWidget = nullptr;
+	UInstructionUserWidget* InstructionWidget = nullptr;
 	
 };
 
