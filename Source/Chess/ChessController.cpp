@@ -33,12 +33,10 @@ void AChessController::OnMouseClick()
 		}
 		FVector HitLocation = HitResult.GetActor()->GetActorLocation();
 
-		UE_LOG(LogTemp, Warning, TEXT("%s"), *HitLocation.ToString())
-
 		if(Piece != nullptr)
 		{
-			Piece->SetEndPosition(HitLocation);
-			Piece->Moved();
+			if(Piece->SetEndPosition(HitLocation))
+				Piece->Moved();
 		}
 	}
 }

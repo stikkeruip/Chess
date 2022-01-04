@@ -56,8 +56,7 @@ void UPieceMovementComponent::TickComponent(float DeltaTime, ELevelTick TickType
 		{
 			FVector CurrentLocation = FMath::Lerp(InitialPosition, EndPosition, FMath::Clamp(TimePassed/TimeToMove, 0.0f, 1.0f));
 			
-			if(CheckMovementValid(Piece_Type, static_cast<int>(CurrentLocation.X), static_cast<int>(CurrentLocation.Y)))
-				GetOwner()->SetActorLocation(CurrentLocation);
+			GetOwner()->SetActorLocation(CurrentLocation);
 		}
 		else
 		{
@@ -69,9 +68,11 @@ void UPieceMovementComponent::TickComponent(float DeltaTime, ELevelTick TickType
 	}
 }
 
-void UPieceMovementComponent::SetEndPosition(FVector Pos)
+bool UPieceMovementComponent::SetEndPosition(FVector Pos)
 {
 	EndPosition = Pos;
+
+	return CheckMovementValid(Piece_Type, Pos.X, Pos.Y);
 }
 
 void UPieceMovementComponent::Moved()
@@ -94,16 +95,15 @@ FVector UPieceMovementComponent::GetGridPosition(FVector Pos)
 	return GetOwner()->GetActorLocation();
 }
 
-bool UPieceMovementComponent::CheckMovementValid(EPieceType PieceType, int F_X, int F_Y)
+bool UPieceMovementComponent::CheckMovementValid(EPieceType PieceType, float F_X, float F_Y)
 {
 	CurrentGrid = GetGridPosition(InitialPosition);
-	CurrentGridX = static_cast<int>(abs(CurrentGrid.X)/100) + 1;
-	CurrentGridY = static_cast<int>(abs(CurrentGrid.Y)/100) + 1;
-	F_X = (abs(F_X)/100) + 1;
-	F_Y = (abs(F_Y)/100) + 1;
-
-	UE_LOG(LogTemp, Warning, TEXT("%i, %i"), CurrentGridX, CurrentGridY);
-	UE_LOG(LogTemp, Warning, TEXT("%i, %i"), F_X, F_Y);
+	
+	CurrentGridX = round(abs(CurrentGrid.X)/100);
+	CurrentGridY = round(abs(CurrentGrid.Y)/100);
+	
+	F_X = round(abs(F_X)/100);
+	F_Y = round(abs(F_Y)/100);
 	
 	if (PieceType == EPieceType::PT_Pawn && F_X == CurrentGridX && F_Y == (CurrentGridY + 1))
 	{

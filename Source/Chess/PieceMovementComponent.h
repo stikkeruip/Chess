@@ -77,7 +77,7 @@ public:
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
-	void SetEndPosition(FVector Pos);
+	bool SetEndPosition(FVector Pos);
 
 	void Moved();
 
@@ -87,7 +87,7 @@ public:
 
 	FVector GetGridPosition(FVector Pos);
 
-	bool CheckMovementValid(EPieceType PieceType, int F_X, int F_Y);
+	bool CheckMovementValid(EPieceType PieceType, float F_X, float F_Y);
 
 	DECLARE_EVENT_TwoParams(UPieceMovementComponent, EPieceStateChange, EColour Colour, EPieceState PieceState);
 	EPieceStateChange& OnStateChanged() { return PieceStateChange; }
