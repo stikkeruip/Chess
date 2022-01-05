@@ -63,7 +63,7 @@ void UPieceMovementComponent::TickComponent(float DeltaTime, ELevelTick TickType
 			InitialPosition = GetOwner()->GetActorLocation();
 			bMoving = false;
 			PieceState = EPieceState::PS_Unselected;
-			PieceStateChange.Broadcast(Colour, PieceState);
+			//PieceStateChange.Broadcast(Colour, PieceState);
 		}
 	}
 }

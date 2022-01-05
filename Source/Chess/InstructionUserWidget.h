@@ -19,6 +19,9 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 		FString GetInstruction() { return Instruction; }
+
+	UFUNCTION(BlueprintImplementableEvent)
+		void UpdateInstruction();
 	
 protected:
 	FString Instruction = "Select a Colour";

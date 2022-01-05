@@ -23,11 +23,11 @@ void UChessRuleSubsystem::InstructionCompleted(EColour Colour, EPieceState Piece
 	if(Colour == EColour::C_Black)
 	{
 		InstructionWidget->SetInstruction(TEXT("Move the black piece"));
-		//UE_LOG(LogTemp, Warning, TEXT("black"));
+		UE_LOG(LogTemp, Warning, TEXT("black"));
 	}
 	if(Colour == EColour::C_White)
 	{
 		InstructionWidget->SetInstruction(TEXT("Move the white piece"));
-		//UE_LOG(LogTemp, Warning, TEXT("white"));
+		UE_LOG(LogTemp, Warning, TEXT("white"));
 	}
 }
