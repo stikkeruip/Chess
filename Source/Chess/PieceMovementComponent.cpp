@@ -3,8 +3,6 @@
 
 #include "PieceMovementComponent.h"
 
-#include "ChessRuleSubsystem.h"
-
 // Sets default values for this component's properties
 UPieceMovementComponent::UPieceMovementComponent()
 {
@@ -12,7 +10,7 @@ UPieceMovementComponent::UPieceMovementComponent()
 	// off to improve performance if you don't need them.
 	PrimaryComponentTick.bCanEverTick = true;
 	PieceState = EPieceState::PS_Unselected;
-
+	Piece = Cast<APiece>(GetOwner());
 	// ...
 }
 
@@ -30,14 +28,13 @@ void UPieceMovementComponent::BeginPlay()
 	InitialPosition = GetOwner()->GetActorLocation();
 
 	bMoved = false;
-
-	bMoving = false;
 	// ...
 
-	UChessRuleSubsystem* ChessRuleSubsystem = GetWorld()->GetSubsystem<UChessRuleSubsystem>();
+	ChessRuleSubsystem = GetWorld()->GetSubsystem<UChessRuleSubsystem>();
 	if(ChessRuleSubsystem)
 	{
 		PieceStateChange.AddUObject(ChessRuleSubsystem, &UChessRuleSubsystem::InstructionCompleted);
+		ChessRuleSubsystem->AddPiece(this);
 	}
 }
 
@@ -51,7 +48,6 @@ void UPieceMovementComponent::TickComponent(float DeltaTime, ELevelTick TickType
 	
 	if(bMoved)
 	{
-		bMoving = true;
 		if (TimePassed < TimeToMove)
 		{
 			FVector CurrentLocation = FMath::Lerp(InitialPosition, EndPosition, FMath::Clamp(TimePassed/TimeToMove, 0.0f, 1.0f));
@@ -61,9 +57,10 @@ void UPieceMovementComponent::TickComponent(float DeltaTime, ELevelTick TickType
 		else
 		{
 			InitialPosition = GetOwner()->GetActorLocation();
-			bMoving = false;
+			bMoved = false;
 			PieceState = EPieceState::PS_Unselected;
-			//PieceStateChange.Broadcast(Colour, PieceState);
+			PieceStateChange.Broadcast(Colour, PieceState);
+			ChessRuleSubsystem->EndTurn(Colour);
 		}
 	}
 }
@@ -72,10 +69,10 @@ bool UPieceMovementComponent::SetEndPosition(FVector Pos)
 {
 	EndPosition = Pos;
 
-	return CheckMovementValid(Piece_Type, Pos.X, Pos.Y);
+	return ChessRuleSubsystem->CheckMovementValid(Piece_Type, Colour, Pos.X, Pos.Y, GetGridPosition());
 }
 
-void UPieceMovementComponent::Moved()
+void UPieceMovementComponent::SetMoved()
 {
 	PieceState = EPieceState::PS_Moving;
 	PieceStateChange.Broadcast(Colour, PieceState);
@@ -84,38 +81,57 @@ void UPieceMovementComponent::Moved()
 	TimePassed = 0;
 }
 
+void UPieceMovementComponent::Attack(UPieceMovementComponent* PieceMovementComponent, AActor* Actor)
+{
+	ChessRuleSubsystem->RemovePiece(PieceMovementComponent);
+
+	SetMoved();
+}
+
+
 void UPieceMovementComponent::Selected()
 {
 	PieceState = EPieceState::PS_Selected;
 	PieceStateChange.Broadcast(Colour, PieceState);
 }
 
-FVector UPieceMovementComponent::GetGridPosition(FVector Pos)
+FVector UPieceMovementComponent::GetGridPosition()
 {
 	return GetOwner()->GetActorLocation();
 }
 
-bool UPieceMovementComponent::CheckMovementValid(EPieceType PieceType, float F_X, float F_Y)
+void UPieceMovementComponent::PostEditChangeProperty(FPropertyChangedEvent& PropertyChangedEvent)
 {
-	CurrentGrid = GetGridPosition(InitialPosition);
-	
-	CurrentGridX = round(abs(CurrentGrid.X)/100);
-	CurrentGridY = round(abs(CurrentGrid.Y)/100);
-	
-	F_X = round(abs(F_X)/100);
-	F_Y = round(abs(F_Y)/100);
-	
-	if (PieceType == EPieceType::PT_Pawn && F_X == CurrentGridX && F_Y == (CurrentGridY + 1))
-	{
-		return true;
-	}
-	if (PieceType == EPieceType::PT_Castle && (F_X >= 1 && F_X <= 8 && F_Y == CurrentGridY || F_Y >= 1 && F_Y <= 8 && F_X == CurrentGridX))
-	{
-		return true;
-	}
+	Super::PostEditChangeProperty(PropertyChangedEvent);
 
-	return false;
+	UE_LOG(LogTemp, Warning, TEXT("%s"), *PropertyChangedEvent.GetPropertyName().ToString());
+
+	if(PropertyChangedEvent.GetPropertyName().ToString().Compare("Colour") == 0)
+	{
+		if(Colour == EColour::C_Black)
+		{
+			Piece->ChangeMaterial(EColour::C_Black);
+			UE_LOG(LogTemp, Warning, TEXT("Black"));
+		}
+		if(Colour == EColour::C_White)
+		{
+			Piece->ChangeMaterial(EColour::C_White);
+			UE_LOG(LogTemp, Warning, TEXT("White"));
+		}
+	}
+	if(PropertyChangedEvent.GetPropertyName().ToString().Compare("Piece_Type") == 0)
+	{
+		if(Piece_Type == EPieceType::PT_Pawn)
+		{
+			Piece->ChangeMesh(EPieceType::PT_Pawn);
+		}
+		if(Piece_Type == EPieceType::PT_Castle)
+		{
+			Piece->ChangeMesh(EPieceType::PT_Castle);
+		}
+	}
 }
+
 
 
 

@@ -3,6 +3,8 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "ChessRuleSubsystem.h"
+#include "Components/BoxComponent.h"
 #include "GameFramework/Actor.h"
 #include "Piece.generated.h"
 
@@ -19,8 +21,35 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
+	UPROPERTY(EditInstanceOnly, BlueprintReadOnly)
+	UStaticMeshComponent* StaticMeshComponent;
+
+	UPROPERTY(EditAnywhere)
+	UBoxComponent* BoxComponent;
+
+	UPieceMovementComponent* MovementComponent;
+
+	UMaterialInterface* MaterialB;
+	UMaterialInterface* MaterialW;
+
+	UStaticMesh* PawnMesh;
+	UStaticMesh* CastleMesh;
+
+	
+
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
+	void ChangeMaterial(EColour Colour);
+
+	void ChangeMesh(EPieceType Piece);
+
+	UFUNCTION( )
+	void BeginOverlap(UPrimitiveComponent* OverlappedComponent, 
+					  AActor* OtherActor, 
+					  UPrimitiveComponent* OtherComp, 
+					  int32 OtherBodyIndex, 
+					  bool bFromSweep, 
+					  const FHitResult &SweepResult );
 };

@@ -2,31 +2,13 @@
 
 #pragma once
 
+#include "ChessRuleSubsystem.h"
+#include "Piece.h"
+
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
 #include "PieceMovementComponent.generated.h"
 
-UENUM()
-enum class EColour
-{
-	C_Black = 0	UMETA(DisplayName = "Black"),
-	C_White = 1	UMETA(DisplayName = "White"),
-};
-
-UENUM()
-enum class EPieceState
-{
-	PS_Unselected = 0	UMETA(DisplayName = "Unselected"),
-	PS_Selected = 1		UMETA(DisplayName = "Selected"),
-	PS_Moving = 2		UMETA(DisplayName = "Moving"),
-};
-
-UENUM()
-enum class EPieceType
-{
-	PT_Pawn = 0		UMETA(DisplayName = "Pawn"),
-	PT_Castle = 1	UMETA(DisplayName = "Castle"),
-};
 
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
@@ -52,16 +34,6 @@ protected:
 
 	bool bMoved;
 
-	bool bMoving;
-
-	int FinalGridX;
-	
-	int FinalGridY;
-
-	int CurrentGridX;
-	
-	int CurrentGridY;
-
 	FVector CurrentGrid;
 
 	UPROPERTY(EditAnywhere)
@@ -72,6 +44,10 @@ protected:
 
 	EPieceState PieceState = static_cast<EPieceState>(0);
 
+	UChessRuleSubsystem* ChessRuleSubsystem = nullptr;
+
+	APiece* Piece;
+
 
 public:	
 	// Called every frame
@@ -79,18 +55,22 @@ public:
 
 	bool SetEndPosition(FVector Pos);
 
-	void Moved();
+	bool GetMoved() { return bMoved; }
 
-	bool GetMoving() { return bMoving; }
+	void SetMoved();
 	
 	void Selected();
 
-	FVector GetGridPosition(FVector Pos);
+	void Attack(UPieceMovementComponent* Piece, AActor* Actor);
 
-	bool CheckMovementValid(EPieceType PieceType, float F_X, float F_Y);
+	EColour GetColour() { return Colour; }
+
+	FVector GetGridPosition();
 
 	DECLARE_EVENT_TwoParams(UPieceMovementComponent, EPieceStateChange, EColour Colour, EPieceState PieceState);
 	EPieceStateChange& OnStateChanged() { return PieceStateChange; }
 	
 	EPieceStateChange PieceStateChange;
+
+	virtual void PostEditChangeProperty(FPropertyChangedEvent& PropertyChangedEvent) override;
 };

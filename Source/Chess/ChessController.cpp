@@ -2,9 +2,14 @@
 
 
 #include "ChessController.h"
-#include "ChessRuleSubsystem.h"
 
-
+void AChessController::BeginPlay()
+{
+	Super::BeginPlay();
+	
+	ChessRuleSubsystem = GetWorld()->GetSubsystem<UChessRuleSubsystem>();
+	
+}
 
 void AChessController::SetupInputComponent()
 {
@@ -23,20 +28,30 @@ void AChessController::OnMouseClick()
 {
 	FHitResult HitResult;
 	
-	if (GetHitResultUnderCursor(ECollisionChannel::ECC_Pawn, true, HitResult) && (Piece == nullptr || !Piece->GetMoving()))
+	if (GetHitResultUnderCursor(ECollisionChannel::ECC_Pawn, true, HitResult) && (!Piece || !Piece->GetMoved()))
 	{
 		if(HitResult.GetActor()->ActorHasTag(TEXT("Piece")))
 		{
-			Piece = HitResult.GetActor()->FindComponentByClass<UPieceMovementComponent>();
-			Piece->Selected();
-			return;
+			TempPiece = HitResult.GetActor()->FindComponentByClass<UPieceMovementComponent>();
+			if(ChessRuleSubsystem && ChessRuleSubsystem->GetTurn() == TempPiece->GetColour())
+			{
+				Piece = TempPiece;
+				TempPiece = nullptr;
+				Piece->Selected();
+				return;
+			}
 		}
 		FVector HitLocation = HitResult.GetActor()->GetActorLocation();
 
-		if(Piece != nullptr)
+		if(Piece && !TempPiece)
 		{
 			if(Piece->SetEndPosition(HitLocation))
-				Piece->Moved();
+				Piece->SetMoved();
+		}
+		if(Piece && TempPiece)
+		{
+			if(Piece->SetEndPosition(HitLocation))
+				Piece->Attack(TempPiece, HitResult.GetActor());
 		}
 	}
 }

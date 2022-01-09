@@ -15,7 +15,8 @@ class CHESS_API AChessController : public APlayerController
 {
 	GENERATED_BODY()
 
-
+	UChessRuleSubsystem* ChessRuleSubsystem;
+	
 	FVector DesiredPosition;
 
 	virtual void SetupInputComponent() override;
@@ -26,4 +27,7 @@ class CHESS_API AChessController : public APlayerController
 	
 public:
 	UPieceMovementComponent* Piece;
+	UPieceMovementComponent* TempPiece;
+
+	virtual void BeginPlay() override;
 };

@@ -3,6 +3,7 @@
 
 #include "ChessRuleSubsystem.h"
 
+#include "PieceMovementComponent.h"
 #include "Blueprint/UserWidget.h"
 #include "Kismet/GameplayStatics.h"
 
@@ -20,14 +21,57 @@ void UChessRuleSubsystem::DisplayInstructionWidget()
 
 void UChessRuleSubsystem::InstructionCompleted(EColour Colour, EPieceState PieceState)
 {
-	if(Colour == EColour::C_Black)
+	if(CurrentColour == EColour::C_Black)
 	{
-		InstructionWidget->SetInstruction(TEXT("Move the black piece"));
+		InstructionWidget->SetInstruction(TEXT("Black Turn"));
 		UE_LOG(LogTemp, Warning, TEXT("black"));
 	}
-	if(Colour == EColour::C_White)
+	if(CurrentColour == EColour::C_White)
 	{
-		InstructionWidget->SetInstruction(TEXT("Move the white piece"));
+		InstructionWidget->SetInstruction(TEXT("White Turn"));
 		UE_LOG(LogTemp, Warning, TEXT("white"));
 	}
+}
+
+void UChessRuleSubsystem::EndTurn(EColour Colour)
+{
+	Colour == EColour::C_White ? CurrentColour = EColour::C_Black : CurrentColour = EColour::C_White;
+}
+
+
+bool UChessRuleSubsystem::CheckMovementValid(EPieceType PieceType, EColour Colour, float F_X, float F_Y, FVector CurrentGrid)
+{
+	int CurrentGridX = round(abs(CurrentGrid.X)/100);
+	int CurrentGridY = round(abs(CurrentGrid.Y)/100);
+	
+	F_X = round(abs(F_X)/100);
+	F_Y = round(abs(F_Y)/100);
+
+	if(Colour == CurrentColour)
+	{
+		if (PieceType == EPieceType::PT_Pawn && F_X == CurrentGridX && (F_Y == CurrentGridY + 1 && Colour == EColour::C_White || F_Y == CurrentGridY - 1 && Colour == EColour::C_Black))
+		{
+			return true;
+		}
+		if (PieceType == EPieceType::PT_Castle && (F_X >= 1 && F_X <= 8 && F_Y == CurrentGridY || F_Y >= 1 && F_Y <= 8 && F_X == CurrentGridX))
+		{
+			return true;
+		}
+
+		return false;
+	}
+
+	return false;
+}
+
+void UChessRuleSubsystem::AddPiece(UPieceMovementComponent* Piece)
+{
+	Pieces.push_back(Piece);
+}
+
+void UChessRuleSubsystem::RemovePiece(UPieceMovementComponent* Piece)
+{
+	auto i = std::find(Pieces.begin(), Pieces.end(), Piece);
+
+	Pieces.erase(i);
 }

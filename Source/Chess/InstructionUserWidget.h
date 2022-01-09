@@ -15,7 +15,7 @@ class CHESS_API UInstructionUserWidget : public UUserWidget
 	GENERATED_BODY()
 
 public:
-	void SetInstruction(FString NewInstruction) { Instruction = NewInstruction; }
+	void SetInstruction(FString NewInstruction) { Instruction = NewInstruction; UpdateInstruction(); }
 
 	UFUNCTION(BlueprintCallable)
 		FString GetInstruction() { return Instruction; }
