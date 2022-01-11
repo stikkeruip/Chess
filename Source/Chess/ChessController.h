@@ -24,10 +24,13 @@ class CHESS_API AChessController : public APlayerController
 	void OnMouseClick();
 
 	APawn* Player;
+
+	UPieceMovementComponent* Piece;
+	
+	UPieceMovementComponent* TempPiece;
+
 	
 public:
-	UPieceMovementComponent* Piece;
-	UPieceMovementComponent* TempPiece;
 
 	virtual void BeginPlay() override;
 };

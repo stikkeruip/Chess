@@ -25,11 +25,6 @@
       <filtered-out-file-type name="COMMIT_BY_MESSAGE" />
     </file-type-list>
   </component>
-  <component name="HighlightingSettingsPerFile">
-    <setting file="mock:///Dummy.cpp" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///Dummy.cpp" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///Dummy.cpp" root0="SKIP_HIGHLIGHTING" />
-  </component>
   <component name="ProjectId" id="21YoLcNRcdhOQMXnwDTxc2FVsZM" />
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectViewState">
@@ -192,6 +187,7 @@
       <workItem from="1641585840547" duration="2900000" />
       <workItem from="1641708388069" duration="21140000" />
       <workItem from="1641731117618" duration="11747000" />
+      <workItem from="1641928235713" duration="3926000" />
     </task>
     <servers />
   </component>

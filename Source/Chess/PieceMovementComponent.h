@@ -37,10 +37,10 @@ protected:
 	FVector CurrentGrid;
 
 	UPROPERTY(EditAnywhere)
-		EColour Colour;
+	EColour Colour;
 
 	UPROPERTY(EditAnywhere)
-		EPieceType Piece_Type;
+	EPieceType Piece_Type;
 
 	EPieceState PieceState = static_cast<EPieceState>(0);
 

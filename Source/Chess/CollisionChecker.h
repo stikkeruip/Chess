@@ -20,11 +20,19 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
+	FVector HitLocation;
+
+	
+
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
-	UFUNCTION( )
+	UPROPERTY(EditAnywhere)
+	UBoxComponent* BoxComponent;
+	
+	
+	UFUNCTION()
 	void BeginOverlap(UPrimitiveComponent* OverlappedComponent, 
 					  AActor* OtherActor, 
 					  UPrimitiveComponent* OtherComp, 
