@@ -1,1 +1,0 @@
-C:\Users\uipko\Documents\Unreal Projects\Chess\Plugins\Developer\RiderLink\Intermediate\Build\Win64\UnrealEditor\Development\RD\Definitions.h
