@@ -57,6 +57,8 @@ public:
 
 	bool GetMoved() { return bMoved; }
 
+	EPieceType GetPieceType() { return Piece_Type; }
+
 	void SetMoved();
 	
 	void Selected();

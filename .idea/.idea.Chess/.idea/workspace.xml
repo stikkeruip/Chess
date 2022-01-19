@@ -32,7 +32,7 @@
     <option name="showLibraryContents" value="true" />
   </component>
   <component name="PropertiesComponent">
-    <property name="DebuggerViewTab_PTCS_FirstProportionKey" value="0.34994584" />
+    <property name="DebuggerViewTab_PTCS_FirstProportionKey" value="0.16793066" />
     <property name="DebuggerViewTab_PTCS_LastProportionKey" value="0.0" />
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
@@ -188,6 +188,10 @@
       <workItem from="1641708388069" duration="21140000" />
       <workItem from="1641731117618" duration="11747000" />
       <workItem from="1641928235713" duration="3926000" />
+      <workItem from="1642182626843" duration="11720000" />
+      <workItem from="1642613128067" duration="2516000" />
+      <workItem from="1642615820131" duration="381000" />
+      <workItem from="1642616305564" duration="2923000" />
     </task>
     <servers />
   </component>
@@ -199,5 +203,12 @@
   <component name="UnityUnitTestConfiguration" currentTestLauncher="NUnit" />
   <component name="VcsManagerConfiguration">
     <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="true" />
+  </component>
+  <component name="XDebuggerManager">
+    <watches-manager>
+      <configuration name="CppProject">
+        <watch expression="y" language="C++" />
+      </configuration>
+    </watches-manager>
   </component>
 </project>

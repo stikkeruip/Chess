@@ -3,7 +3,6 @@
 
 #include "ChessRuleSubsystem.h"
 
-#include "CollisionChecker.h"
 #include "PieceMovementComponent.h"
 #include "Blueprint/UserWidget.h"
 #include "Kismet/GameplayStatics.h"
@@ -31,10 +30,6 @@ void UChessRuleSubsystem::InstructionCompleted(EColour Colour, EPieceState Piece
 	{
 		InstructionWidget->SetInstruction(TEXT("White Turn"));
 		UE_LOG(LogTemp, Warning, TEXT("white"));
-	}
-	if(PieceState == EPieceState::PS_Selected)
-	{
-		//Spawn the collider checker at the piece's location.
 	}
 }
 
