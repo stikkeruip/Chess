@@ -7,6 +7,8 @@
 #include "Subsystems/WorldSubsystem.h"
 #include <vector>
 
+#include "ChessPlayer.h"
+#include "GameFramework/GameModeBase.h"
 #include "ChessRuleSubsystem.generated.h"
 
 /**
@@ -66,6 +68,7 @@ private:
 	std::vector<UPieceMovementComponent*> Pieces;
 
 	EColour CurrentColour = EColour::C_White;
-	
+
+	AChessPlayer* ChessPlayer = Cast<AChessPlayer>(GetWorld()->GetAuthGameMode()->DefaultPawnClass.GetDefaultObject());
 };
 

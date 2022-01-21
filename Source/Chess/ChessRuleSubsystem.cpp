@@ -36,6 +36,15 @@ void UChessRuleSubsystem::InstructionCompleted(EColour Colour, EPieceState Piece
 void UChessRuleSubsystem::EndTurn(EColour Colour)
 {
 	Colour == EColour::C_White ? CurrentColour = EColour::C_Black : CurrentColour = EColour::C_White;
+
+	if(CurrentColour == EColour::C_White)
+	{
+		ChessPlayer->CameraWhite();
+	}
+	if(CurrentColour == EColour::C_White)
+	{
+		ChessPlayer->CameraBlack();
+	}
 }
 
 
