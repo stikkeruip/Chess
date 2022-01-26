@@ -30,6 +30,9 @@ class CHESS_API AChessController : public APlayerController
 	
 	UPieceMovementComponent* TempPiece;
 
+	UPROPERTY(EditAnywhere)
+	TSubclassOf<class AActor> ActorToSpawn;
+
 	float XDir[4] = {0.f, 0.f, 800.f, -800.f};
 	float YDir[4] = {800.f, -800.f, 0.f, 0.f};
 	float XStartOffset [4] = {0.f, 0.f, 60.f, -60.f};

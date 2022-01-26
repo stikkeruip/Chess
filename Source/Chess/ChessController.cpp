@@ -16,6 +16,8 @@ void AChessController::DisplayMoves(FVector StartLocation, EPieceType PieceType,
 {
 	FHitResult HitResult;
 	FCollisionQueryParams TraceParams;
+	FRotator Rotation = FRotator();
+	FVector ActorSpawnLocation;
 	
 	if (PieceType == EPieceType::PT_Castle)
 	{
@@ -24,13 +26,36 @@ void AChessController::DisplayMoves(FVector StartLocation, EPieceType PieceType,
 			GetWorld()->LineTraceSingleByChannel(HitResult, StartLocation + FVector(XStartOffset[y], YStartOffset[y], 20.f), StartLocation + FVector(XDir[y], YDir[y], 20.f), ECC_Pawn, TraceParams);
 			if(HitResult.GetActor())
 			{
-				for(int i = PiecePos(StartLocation, y); i > PiecePos(HitResult.GetActor()->GetActorLocation(), y); i += HitDir[y])
+				for(int i = round(PiecePos(StartLocation, y) + HitDir[y]); i > round(PiecePos(HitResult.GetActor()->GetActorLocation(), y)); i += HitDir[y])
 				{
-					UE_LOG(LogTemp, Warning, TEXT("%i"), i);
+					if(y <= 1 )
+					{
+						ActorSpawnLocation = FVector(round(StartLocation.X), i, 30.f);
+						
+						GetWorld()->SpawnActor(ActorToSpawn, &ActorSpawnLocation, &Rotation);
+					}
+					else
+					{
+						ActorSpawnLocation = FVector(i, round(ActorSpawnLocation.Y), 30.f);
+						
+						GetWorld()->SpawnActor(ActorToSpawn, &ActorSpawnLocation, &Rotation);
+					}
+					
 				}
-				for(int i = PiecePos(StartLocation, y); i < PiecePos(HitResult.GetActor()->GetActorLocation(), y); i += HitDir[y])
+				for(int i = round(PiecePos(StartLocation, y) + HitDir[y]); i < round(PiecePos(HitResult.GetActor()->GetActorLocation(), y)); i += HitDir[y])
 				{
-					UE_LOG(LogTemp, Warning, TEXT("%i"), i);
+					if(y <= 1 )
+					{
+						ActorSpawnLocation = FVector(round(StartLocation.X), i, 30.f);
+						
+						GetWorld()->SpawnActor(ActorToSpawn, &ActorSpawnLocation, &Rotation);
+					}
+					else
+					{
+						ActorSpawnLocation = FVector(i, round(ActorSpawnLocation.Y), 30.f);
+						
+						GetWorld()->SpawnActor(ActorToSpawn, &ActorSpawnLocation, &Rotation);
+					}
 				}
 			}
 		}

@@ -6,6 +6,7 @@
 #include "PieceMovementComponent.h"
 #include "Blueprint/UserWidget.h"
 #include "Kismet/GameplayStatics.h"
+#include "ChessPlayer.h"
 
 void UChessRuleSubsystem::CreateInstructionWidget(TSubclassOf<UUserWidget> InstructionWidgetClass)
 {
@@ -41,7 +42,7 @@ void UChessRuleSubsystem::EndTurn(EColour Colour)
 	{
 		ChessPlayer->CameraWhite();
 	}
-	if(CurrentColour == EColour::C_White)
+	if(CurrentColour == EColour::C_Black)
 	{
 		ChessPlayer->CameraBlack();
 	}
