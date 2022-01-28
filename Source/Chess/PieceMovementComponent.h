@@ -10,7 +10,6 @@
 #include "PieceMovementComponent.generated.h"
 
 
-
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class CHESS_API UPieceMovementComponent : public UActorComponent
 {
@@ -47,7 +46,6 @@ protected:
 	UChessRuleSubsystem* ChessRuleSubsystem = nullptr;
 
 	APiece* Piece;
-
 
 public:	
 	// Called every frame

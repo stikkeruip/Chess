@@ -10,7 +10,7 @@
 AChessPlayer::AChessPlayer()
 {
  	// Set this pawn to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
-	PrimaryActorTick.bCanEverTick = false;
+	PrimaryActorTick.bCanEverTick = true;
 
 	CameraComponent = CreateDefaultSubobject<UCameraComponent>(TEXT("CameraComponent"));
 	ArrowComponentWhite = CreateDefaultSubobject<UArrowComponent>(TEXT("WhiteArrow"));
@@ -26,7 +26,19 @@ void AChessPlayer::BeginPlay()
 {
 	Super::BeginPlay();
 
-	CameraWhite();
+	TimeToMove = 1.f;
+
+	TimePassed = 0;
+
+	bMoved = false;
+	
+	CameraComponent->SetRelativeLocation(ArrowComponentWhite->GetRelativeLocation());
+	
+	CameraComponent->SetRelativeRotation(ArrowComponentWhite->GetRelativeRotation());
+
+	InitialPosition = CameraComponent->GetRelativeLocation();
+
+	InitialRotation = CameraComponent->GetRelativeRotation();
 	
 	GetWorld()->GetSubsystem<UChessRuleSubsystem>()->ChessPlayer = this;
 }
@@ -36,6 +48,24 @@ void AChessPlayer::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+	TimePassed += DeltaTime;
+
+	if(bMoved)
+	{
+		if (TimePassed < TimeToMove)
+		{
+			FVector CurrentLocation = FMath::Lerp(InitialPosition, FinalPosition, FMath::Clamp(TimePassed/TimeToMove, 0.0f, 1.0f));
+			FRotator CurrentRotation = FMath::Lerp(InitialRotation, FinalRotation, FMath::Clamp(TimePassed/TimeToMove, 0.0f, 1.0f));
+			CameraComponent->SetRelativeLocation(CurrentLocation);
+			CameraComponent->SetRelativeRotation(CurrentRotation);
+		}
+		else
+		{
+			InitialPosition = CameraComponent->GetRelativeLocation();
+			InitialRotation = CameraComponent->GetRelativeRotation();
+			bMoved = false;
+		}
+	}
 }
 
 // Called to bind functionality to input
@@ -47,16 +77,22 @@ void AChessPlayer::SetupPlayerInputComponent(UInputComponent* PlayerInputCompone
 
 void AChessPlayer::CameraWhite()
 {
-	CameraComponent->SetRelativeLocation(ArrowComponentWhite->GetRelativeLocation());
-	CameraComponent->SetRelativeRotation(ArrowComponentWhite->GetRelativeRotation());
+	FinalPosition = ArrowComponentWhite->GetRelativeLocation();
+	FinalRotation = ArrowComponentWhite->GetRelativeRotation();
+
+	bMoved = true;
+	TimePassed = 0;
 
 	UE_LOG(LogTemp, Warning, TEXT("White Camera"));
 }
 
 void AChessPlayer::CameraBlack()
 {
-	CameraComponent->SetRelativeLocation(ArrowComponentBlack->GetRelativeLocation());
-	CameraComponent->SetRelativeRotation(ArrowComponentBlack->GetRelativeRotation());
+	FinalPosition = ArrowComponentBlack->GetRelativeLocation();
+	FinalRotation = ArrowComponentBlack->GetRelativeRotation();
+
+	bMoved = true;
+	TimePassed = 0;
 
 	UE_LOG(LogTemp, Warning, TEXT("Black Camera"));
 }

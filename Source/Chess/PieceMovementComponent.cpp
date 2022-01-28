@@ -20,7 +20,6 @@ void UPieceMovementComponent::BeginPlay()
 {
 	Super::BeginPlay();
 	
-
 	TimeToMove = 2.f;
 
 	TimePassed = 0;
@@ -51,7 +50,6 @@ void UPieceMovementComponent::TickComponent(float DeltaTime, ELevelTick TickType
 		if (TimePassed < TimeToMove)
 		{
 			FVector CurrentLocation = FMath::Lerp(InitialPosition, EndPosition, FMath::Clamp(TimePassed/TimeToMove, 0.0f, 1.0f));
-			
 			GetOwner()->SetActorLocation(CurrentLocation);
 		}
 		else

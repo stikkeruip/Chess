@@ -32,6 +32,20 @@ protected:
 	UPROPERTY(EditAnywhere)
 	UArrowComponent* ArrowComponentBlack;
 
+	float TimeToMove;
+
+	float TimePassed;
+
+	FVector InitialPosition;
+
+	FVector FinalPosition;
+
+	FRotator InitialRotation;
+
+	FRotator FinalRotation;
+
+	bool bMoved;
+
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
