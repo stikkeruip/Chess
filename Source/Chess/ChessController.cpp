@@ -12,6 +12,18 @@ void AChessController::BeginPlay()
 	
 }
 
+bool AChessController::IsInSameGrid(FVector CurrentPosition, FVector TargetPosition)
+{
+	if(abs(CurrentPosition.X - TargetPosition.X) < GRID_SIZE / 2 && abs(CurrentPosition.Y - TargetPosition.Y) < GRID_SIZE / 2)
+	{
+		return true;
+	}
+	else
+	{
+		return false;
+	}
+}
+
 void AChessController::DisplayMoves(FVector StartLocation, EPieceType PieceType, EColour PieceColour)
 {
 	FHitResult HitResult;
@@ -21,54 +33,35 @@ void AChessController::DisplayMoves(FVector StartLocation, EPieceType PieceType,
 	
 	if (PieceType == EPieceType::PT_Castle)
 	{
-		for (int y = 0; y <= 3; y++)
+		for (int DirectionIndex = 0; DirectionIndex < DirectionNum; DirectionIndex++)
 		{
-			GetWorld()->LineTraceSingleByChannel(HitResult, StartLocation + FVector(XStartOffset[y], YStartOffset[y], 20.f), StartLocation + FVector(XDir[y], YDir[y], 20.f), ECC_Pawn, TraceParams);
-			if(HitResult.GetActor())
+			GetWorld()->LineTraceSingleByChannel(
+				HitResult, StartLocation + FVector(XStartOffset[DirectionIndex], YStartOffset[DirectionIndex], 20.f),
+				StartLocation + FVector(XDir[DirectionIndex], YDir[DirectionIndex], 20.f), ECC_Pawn, TraceParams);
+			if (HitResult.GetActor())
 			{
-				for(int i = round(PiecePos(StartLocation, y) + HitDir[y]); i > round(PiecePos(HitResult.GetActor()->GetActorLocation(), y)); i += HitDir[y])
+				FVector TargetPosition = HitResult.GetActor()->GetActorLocation();
+				FVector DeltaVector = FVector(StepOffsetX[DirectionIndex], StepOffsetY[DirectionIndex], 0.0f);
+				FVector FirstCheckPosition = StartLocation + DeltaVector;
+				for (FVector CurrentPosition = FirstCheckPosition; !IsInSameGrid(CurrentPosition, TargetPosition); CurrentPosition += DeltaVector)
 				{
-					if(y <= 1 )
-					{
-						ActorSpawnLocation = FVector(round(StartLocation.X), i, 30.f);
-						
-						GetWorld()->SpawnActor(ActorToSpawn, &ActorSpawnLocation, &Rotation);
-					}
-					else
-					{
-						ActorSpawnLocation = FVector(i, round(ActorSpawnLocation.Y), 30.f);
-						
-						GetWorld()->SpawnActor(ActorToSpawn, &ActorSpawnLocation, &Rotation);
-					}
-					
-				}
-				for(int i = round(PiecePos(StartLocation, y) + HitDir[y]); i < round(PiecePos(HitResult.GetActor()->GetActorLocation(), y)); i += HitDir[y])
-				{
-					if(y <= 1 )
-					{
-						ActorSpawnLocation = FVector(round(StartLocation.X), i, 30.f);
-						
-						GetWorld()->SpawnActor(ActorToSpawn, &ActorSpawnLocation, &Rotation);
-					}
-					else
-					{
-						ActorSpawnLocation = FVector(i, round(ActorSpawnLocation.Y), 30.f);
-						
-						GetWorld()->SpawnActor(ActorToSpawn, &ActorSpawnLocation, &Rotation);
-					}
+					GetWorld()->SpawnActor(ActorToSpawn, &CurrentPosition, &Rotation);
 				}
 			}
 		}
 	}
 }
 
-float AChessController::PiecePos(FVector PPiece, int Pos)
+float AChessController::PositionOnDirection(FVector Vector, int DirectionIndex)
 {
-	if(Pos == 0 || Pos == 1)
+	if(DirectionIndex == DirectionUp || DirectionIndex == DirectionDown)
 	{
-		return PPiece.Y;
+		return Vector.Y;
 	}
-	return PPiece.X;
+	else
+	{
+		return Vector.X;
+	}
 }
 
 void AChessController::SetupInputComponent()
@@ -92,33 +85,37 @@ void AChessController::OnMouseClick()
 	
 	if (GetHitResultUnderCursor(ECollisionChannel::ECC_Pawn, true, HitResult) && (!Piece || !Piece->GetMoved()))
 	{
-		if(HitResult.GetActor()->ActorHasTag(TEXT("Piece")))
+		if(HitResult.GetActor())
 		{
-			TempPiece = HitResult.GetActor()->FindComponentByClass<UPieceMovementComponent>();
-			if(ChessRuleSubsystem && ChessRuleSubsystem->GetTurn() == TempPiece->GetColour())
+			AActor* HitActor = HitResult.GetActor();
+			if(HitActor->ActorHasTag(TEXT("Piece")))
 			{
-				FVector HitLocation = HitResult.GetActor()->GetActorLocation();
+				TempPiece = HitActor->FindComponentByClass<UPieceMovementComponent>();
+				if(ChessRuleSubsystem && ChessRuleSubsystem->GetTurn() == TempPiece->GetColour())
+				{
+					FVector HitLocation = HitActor->GetActorLocation();
 				
-				Piece = TempPiece;
-				TempPiece = nullptr;
-				Piece->Selected();
+					Piece = TempPiece;
+					TempPiece = nullptr;
+					Piece->Selected();
 				
-				DisplayMoves(HitLocation, Piece->GetPieceType(), Piece->GetColour());
+					DisplayMoves(HitLocation, Piece->GetPieceType(), Piece->GetColour());
 				
-				return;
+					return;
+				}
 			}
-		}
-		FVector HitLocation = HitResult.GetActor()->GetActorLocation();
+			FVector HitLocation = HitActor->GetActorLocation();
 
-		if(Piece && !TempPiece)
-		{
-			if(Piece->SetEndPosition(HitLocation))
-				Piece->SetMoved();
-		}
-		if(Piece && TempPiece)
-		{
-			if(Piece->SetEndPosition(HitLocation))
-				Piece->Attack(TempPiece, HitResult.GetActor());
+			if(Piece && !TempPiece)
+			{
+				if(Piece->SetEndPosition(HitLocation))
+					Piece->SetMoved();
+			}
+			if(Piece && TempPiece)
+			{
+				if(Piece->SetEndPosition(HitLocation))
+					Piece->Attack(TempPiece, HitActor);
+			}
 		}
 	}
 }
