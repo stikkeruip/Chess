@@ -71,6 +71,29 @@ void AChessController::DisplayMoves(FVector StartLocation, EPieceType PieceType,
 			}
 		}
 	}
+	if(PieceType == EPieceType::PT_Pawn)
+	{
+		if(PieceColour == EColour::C_White)
+		{
+			GetWorld()->LineTraceSingleByChannel(HitResult, StartLocation + FVector(0.f, 60.f, 20.f), StartLocation + FVector(0.f, 100.f, 20.f), ECC_Pawn, TraceParams);
+			if (!HitResult.GetActor())
+			{
+				FVector SpawnPosition = StartLocation + FVector(0.f, 100.f, 20.f);
+				AActor* SpawnedActor = GetWorld()->SpawnActor(ActorToSpawn, &SpawnPosition, &Rotation);
+				SpawnedActors.Add(SpawnedActor);
+			}
+		}
+		if(PieceColour == EColour::C_Black)
+		{
+			GetWorld()->LineTraceSingleByChannel(HitResult, StartLocation + FVector(0.f, -60.f, 20.f), StartLocation + FVector(0.f, -100.f, 20.f), ECC_Pawn, TraceParams);
+			if (!HitResult.GetActor())
+			{
+				FVector SpawnPosition = StartLocation + FVector(0.f, -100.f, 20.f);
+				AActor* SpawnedActor = GetWorld()->SpawnActor(ActorToSpawn, &SpawnPosition, &Rotation);
+				SpawnedActors.Add(SpawnedActor);
+			}
+		}
+	}
 }
 
 float AChessController::PositionOnDirection(FVector Vector, int DirectionIndex)
