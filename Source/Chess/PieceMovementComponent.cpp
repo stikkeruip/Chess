@@ -65,9 +65,12 @@ void UPieceMovementComponent::TickComponent(float DeltaTime, ELevelTick TickType
 
 bool UPieceMovementComponent::SetEndPosition(FVector Pos)
 {
-	EndPosition = Pos;
-
-	return ChessRuleSubsystem->CheckMovementValid(Piece_Type, Colour, Pos.X, Pos.Y, GetGridPosition());
+	if(ChessRuleSubsystem->CheckMovementValid(Piece_Type, Colour, Pos.X, Pos.Y, GetGridPosition()))
+	{
+		EndPosition = Pos;
+		return true;
+	}
+	return false;
 }
 
 void UPieceMovementComponent::SetMoved()

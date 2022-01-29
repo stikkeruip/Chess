@@ -75,7 +75,7 @@ void APiece::BeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* Othe
 {
 	MovementComponent = OtherActor->FindComponentByClass<UPieceMovementComponent>();
 
-	if(MovementComponent->GetColour() != FindComponentByClass<UPieceMovementComponent>()->GetColour())
+	if(MovementComponent && MovementComponent->GetColour() != FindComponentByClass<UPieceMovementComponent>()->GetColour())
 		OtherActor->Destroy();
 	
 }

@@ -50,6 +50,8 @@ class CHESS_API AChessController : public APlayerController
 	int StepOffsetX[4] = {0, 0, GRID_SIZE, -GRID_SIZE};
 	int StepOffsetY[4] = {GRID_SIZE, -GRID_SIZE, 0, 0};
 
+	TArray<AActor*> SpawnedActors;
+
 	
 	float PositionOnDirection(FVector PPiece, int Pos);
 	bool IsInSameGrid(FVector CurrentPosition, FVector TargetPosition);
@@ -57,6 +59,10 @@ class CHESS_API AChessController : public APlayerController
 public:
 	
 	virtual void BeginPlay() override;
+
+	void ClearSpawnedMovementIndicators();
+
+	bool IsValidMoveTarget(FVector HitLocation);
 
 	void DisplayMoves(FVector Start, EPieceType PieceType, EColour PieceColour);
 };

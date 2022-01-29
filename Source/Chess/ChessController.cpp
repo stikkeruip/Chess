@@ -12,6 +12,27 @@ void AChessController::BeginPlay()
 	
 }
 
+void AChessController::ClearSpawnedMovementIndicators()
+{
+	for (auto i : SpawnedActors)
+	{
+		i->Destroy();
+	}
+	SpawnedActors.Empty();
+}
+
+bool AChessController::IsValidMoveTarget(FVector HitLocation)
+{
+	for(auto i : SpawnedActors)
+	{
+		if(IsInSameGrid(HitLocation, i->GetActorLocation()))
+		{
+			return true;
+		}
+	}
+	return false;
+}
+
 bool AChessController::IsInSameGrid(FVector CurrentPosition, FVector TargetPosition)
 {
 	if(abs(CurrentPosition.X - TargetPosition.X) < GRID_SIZE / 2 && abs(CurrentPosition.Y - TargetPosition.Y) < GRID_SIZE / 2)
@@ -29,7 +50,6 @@ void AChessController::DisplayMoves(FVector StartLocation, EPieceType PieceType,
 	FHitResult HitResult;
 	FCollisionQueryParams TraceParams;
 	FRotator Rotation = FRotator();
-	FVector ActorSpawnLocation;
 	
 	if (PieceType == EPieceType::PT_Castle)
 	{
@@ -45,7 +65,8 @@ void AChessController::DisplayMoves(FVector StartLocation, EPieceType PieceType,
 				FVector FirstCheckPosition = StartLocation + DeltaVector;
 				for (FVector CurrentPosition = FirstCheckPosition; !IsInSameGrid(CurrentPosition, TargetPosition); CurrentPosition += DeltaVector)
 				{
-					GetWorld()->SpawnActor(ActorToSpawn, &CurrentPosition, &Rotation);
+					AActor* SpawnedActor = GetWorld()->SpawnActor(ActorToSpawn, &CurrentPosition, &Rotation);
+					SpawnedActors.Add(SpawnedActor);
 				}
 			}
 		}
@@ -75,6 +96,8 @@ void AChessController::SetupInputComponent()
 	InputComponent->BindAction("MouseClick", IE_Pressed, this, &AChessController::OnMouseClick);
 
 	Piece = nullptr;
+
+	
 }
 
 void AChessController::OnMouseClick()
@@ -108,13 +131,19 @@ void AChessController::OnMouseClick()
 
 			if(Piece && !TempPiece)
 			{
-				if(Piece->SetEndPosition(HitLocation))
+				if(Piece->SetEndPosition(HitLocation) && IsValidMoveTarget(HitLocation))
+				{
+					ClearSpawnedMovementIndicators();
 					Piece->SetMoved();
+				}
 			}
 			if(Piece && TempPiece)
 			{
 				if(Piece->SetEndPosition(HitLocation))
+				{
+					ClearSpawnedMovementIndicators();
 					Piece->Attack(TempPiece, HitActor);
+				}
 			}
 		}
 	}
