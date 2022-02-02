@@ -22,7 +22,7 @@ protected:
 	virtual void BeginPlay() override;
 
 	UPROPERTY(EditInstanceOnly, BlueprintReadOnly)
-	UStaticMeshComponent* StaticMeshComponent;
+	USkeletalMeshComponent* SkeletalMeshComponent;
 
 	UPROPERTY(EditAnywhere)
 	UBoxComponent* BoxComponent;
@@ -31,9 +31,9 @@ protected:
 
 	UMaterialInterface* MaterialB;
 	UMaterialInterface* MaterialW;
-
-	UStaticMesh* PawnMesh;
-	UStaticMesh* CastleMesh;
+	
+	USkeletalMesh* PawnMesh;
+	USkeletalMesh* CastleMesh;
 
 	
 

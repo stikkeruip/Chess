@@ -12,19 +12,19 @@ APiece::APiece()
 	PrimaryActorTick.bCanEverTick = false;
 
 	
-	StaticMeshComponent = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("StaticMeshComponent"));
-	StaticMeshComponent->SetupAttachment(RootComponent);
+	SkeletalMeshComponent = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("StaticMeshComponent"));
+	SkeletalMeshComponent->SetupAttachment(RootComponent);
 	
 	BoxComponent = CreateDefaultSubobject<UBoxComponent>(TEXT("BoxCollision"));
-	BoxComponent->SetupAttachment(StaticMeshComponent);	
+	BoxComponent->SetupAttachment(SkeletalMeshComponent);	
 	
 	static ConstructorHelpers::FObjectFinder<UMaterialInterface> MaterialBlack(TEXT("Material'/Game/StarterContent/Materials/M_Basic_Floor.M_Basic_Floor'"));
 	static ConstructorHelpers::FObjectFinder<UMaterialInterface> MaterialWhite(TEXT("Material'/Game/StarterContent/Props/Materials/M_MaterialSphere_Plain.M_MaterialSphere_Plain'"));
 	MaterialB = MaterialBlack.Object;
 	MaterialW = MaterialWhite.Object;
 	
-	static ConstructorHelpers::FObjectFinder<UStaticMesh> Pawn(TEXT("StaticMesh'/Game/StarterContent/Shapes/Shape_Cone.Shape_Cone'"));
-	static ConstructorHelpers::FObjectFinder<UStaticMesh> Castle(TEXT("StaticMesh'/Game/StarterContent/Shapes/Shape_Cube.Shape_Cube'"));
+	static ConstructorHelpers::FObjectFinder<USkeletalMesh> Pawn(TEXT("SkeletalMesh'/Game/ParagonSevarog/Characters/Heroes/Sevarog/Meshes/Sevarog.Sevarog'"));
+	static ConstructorHelpers::FObjectFinder<USkeletalMesh> Castle(TEXT("SkeletalMesh'/Game/ParagonSevarog/Characters/Heroes/Sevarog/Meshes/Sevarog.Sevarog'"));
 	PawnMesh = Pawn.Object;
 	CastleMesh = Castle.Object;
 	
@@ -50,11 +50,11 @@ void APiece::ChangeMaterial(EColour Colour)
 {
 	if (Colour == EColour::C_Black)
 	{
-		StaticMeshComponent->SetMaterial(0, MaterialB);
+		SkeletalMeshComponent->SetMaterial(0, MaterialB);
 	}
 	if (Colour == EColour::C_White)
 	{
-		StaticMeshComponent->SetMaterial(0, MaterialW);
+		SkeletalMeshComponent->SetMaterial(0, MaterialW);
 	}
 }
 
@@ -62,11 +62,11 @@ void APiece::ChangeMesh(EPieceType Piece)
 {
 	if (Piece == EPieceType::PT_Pawn)
 	{
-		StaticMeshComponent->SetStaticMesh(PawnMesh);
+		SkeletalMeshComponent->SetSkeletalMesh(PawnMesh);
 	}
 	if (Piece == EPieceType::PT_Castle)
 	{
-		StaticMeshComponent->SetStaticMesh(CastleMesh);
+		SkeletalMeshComponent->SetSkeletalMesh(CastleMesh);
 	}
 }
 
