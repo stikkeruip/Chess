@@ -26,6 +26,8 @@ class CHESS_API AChessController : public APlayerController
 
 	APawn* Player;
 
+	AActor* PieceBeingMoved;
+	
 	UPieceMovementComponent* Piece;
 	
 	UPieceMovementComponent* TempPiece;

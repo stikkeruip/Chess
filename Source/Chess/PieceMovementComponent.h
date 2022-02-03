@@ -53,6 +53,7 @@ public:
 
 	bool SetEndPosition(FVector Pos);
 
+	UFUNCTION(BlueprintCallable)
 	bool GetMoved() { return bMoved; }
 
 	EPieceType GetPieceType() { return Piece_Type; }

@@ -58,7 +58,7 @@ void AChessController::DisplayMoves(FVector StartLocation, EPieceType PieceType,
 			GetWorld()->LineTraceSingleByChannel(
 				HitResult, StartLocation + FVector(XStartOffset[DirectionIndex], YStartOffset[DirectionIndex], 20.f),
 				StartLocation + FVector(XDir[DirectionIndex], YDir[DirectionIndex], 20.f), ECC_Pawn, TraceParams);
-			if (HitResult.GetActor())
+			if (HitResult.GetActor() && HitResult.GetActor() != PieceBeingMoved)
 			{
 				FVector TargetPosition = HitResult.GetActor()->GetActorLocation();
 				FVector DeltaVector = FVector(StepOffsetX[DirectionIndex], StepOffsetY[DirectionIndex], 0.0f);
@@ -76,7 +76,7 @@ void AChessController::DisplayMoves(FVector StartLocation, EPieceType PieceType,
 		if(PieceColour == EColour::C_White)
 		{
 			GetWorld()->LineTraceSingleByChannel(HitResult, StartLocation + FVector(0.f, 60.f, 20.f), StartLocation + FVector(0.f, 100.f, 20.f), ECC_Pawn, TraceParams);
-			if (!HitResult.GetActor())
+			if (!HitResult.GetActor() && HitResult.GetActor() != PieceBeingMoved)
 			{
 				FVector SpawnPosition = StartLocation + FVector(0.f, 100.f, 20.f);
 				AActor* SpawnedActor = GetWorld()->SpawnActor(ActorToSpawn, &SpawnPosition, &Rotation);
@@ -142,6 +142,7 @@ void AChessController::OnMouseClick()
 					FVector HitLocation = HitActor->GetActorLocation();
 				
 					Piece = TempPiece;
+					PieceBeingMoved = HitResult.GetActor();
 					TempPiece = nullptr;
 					Piece->Selected();
 				
