@@ -33,6 +33,10 @@ protected:
 
 	bool bMoved;
 
+	bool bAttacked;
+
+	bool bAttacking;
+
 	FVector CurrentGrid;
 
 	UPROPERTY(EditAnywhere)
@@ -55,6 +59,14 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	bool GetMoved() { return bMoved; }
+
+	UFUNCTION(BlueprintCallable)
+	bool GetAttacking() { return bAttacking; }
+
+	UFUNCTION(BlueprintCallable)
+	void SetAttacking(bool Attacking) { bAttacking = Attacking; bAttacked = false; bMoved = true;}
+	
+	bool CanAttack();
 
 	EPieceType GetPieceType() { return Piece_Type; }
 

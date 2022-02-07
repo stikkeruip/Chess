@@ -27,7 +27,10 @@ void UPieceMovementComponent::BeginPlay()
 	InitialPosition = GetOwner()->GetActorLocation();
 
 	bMoved = false;
-	// ...
+
+	bAttacked = false;
+
+	bAttacking = false;
 
 	ChessRuleSubsystem = GetWorld()->GetSubsystem<UChessRuleSubsystem>();
 	if(ChessRuleSubsystem)
@@ -42,11 +45,16 @@ void UPieceMovementComponent::BeginPlay()
 void UPieceMovementComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
-
+	
 	TimePassed += DeltaTime;
 	
 	if(bMoved)
 	{
+		if (bAttacked && CanAttack())
+		{
+			bMoved = false;
+			bAttacking = true;
+		}
 		if (TimePassed < TimeToMove)
 		{
 			FVector CurrentLocation = FMath::Lerp(InitialPosition, EndPosition, FMath::Clamp(TimePassed/TimeToMove, 0.0f, 1.0f));
@@ -61,6 +69,11 @@ void UPieceMovementComponent::TickComponent(float DeltaTime, ELevelTick TickType
 			ChessRuleSubsystem->EndTurn(Colour);
 		}
 	}
+}
+
+bool UPieceMovementComponent::CanAttack()
+{
+	return (FVector::DistXY(GetGridPosition(), EndPosition) < 150);
 }
 
 bool UPieceMovementComponent::SetEndPosition(FVector Pos)
@@ -86,6 +99,7 @@ void UPieceMovementComponent::Attack(UPieceMovementComponent* PieceMovementCompo
 {
 	ChessRuleSubsystem->RemovePiece(PieceMovementComponent);
 
+	bAttacked = true;
 	SetMoved();
 }
 
@@ -109,27 +123,11 @@ void UPieceMovementComponent::PostEditChangeProperty(FPropertyChangedEvent& Prop
 
 	if(PropertyChangedEvent.GetPropertyName().ToString().Compare("Colour") == 0)
 	{
-		if(Colour == EColour::C_Black)
-		{
-			Piece->ChangeMaterial(EColour::C_Black);
-			UE_LOG(LogTemp, Warning, TEXT("Black"));
-		}
-		if(Colour == EColour::C_White)
-		{
-			Piece->ChangeMaterial(EColour::C_White);
-			UE_LOG(LogTemp, Warning, TEXT("White"));
-		}
+		Piece->ChangeMaterial(Colour, Piece_Type);
 	}
 	if(PropertyChangedEvent.GetPropertyName().ToString().Compare("Piece_Type") == 0)
 	{
-		if(Piece_Type == EPieceType::PT_Pawn)
-		{
-			Piece->ChangeMesh(EPieceType::PT_Pawn);
-		}
-		if(Piece_Type == EPieceType::PT_Castle)
-		{
-			Piece->ChangeMesh(EPieceType::PT_Castle);
-		}
+		Piece->ChangeMesh(Piece_Type);
 	}
 }
 

@@ -32,6 +32,9 @@ protected:
 	UMaterialInterface* MaterialB;
 	UMaterialInterface* MaterialW;
 	
+	UMaterialInterface* MaterialB_P;
+	UMaterialInterface* MaterialW_P;
+	
 	USkeletalMesh* PawnMesh;
 	USkeletalMesh* CastleMesh;
 
@@ -40,8 +43,8 @@ protected:
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
-
-	void ChangeMaterial(EColour Colour);
+	
+	void ChangeMaterial(EColour Colour, EPieceType Piece);
 
 	void ChangeMesh(EPieceType Piece);
 

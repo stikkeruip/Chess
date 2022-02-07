@@ -22,8 +22,15 @@ APiece::APiece()
 	static ConstructorHelpers::FObjectFinder<UMaterialInterface> MaterialWhite(TEXT("Material'/Game/StarterContent/Props/Materials/M_MaterialSphere_Plain.M_MaterialSphere_Plain'"));
 	MaterialB = MaterialBlack.Object;
 	MaterialW = MaterialWhite.Object;
+
+	static ConstructorHelpers::FObjectFinder<UMaterialInterface> MaterialBlackPawn(TEXT("MaterialInstanceConstant'/Game/ParagonMinions/Characters/Minions/Dusk_Minions/Materials/Super/MI_Minion_Dusk_Super.MI_Minion_Dusk_Super'"));
+	static ConstructorHelpers::FObjectFinder<UMaterialInterface> MaterialWhitePawn(TEXT("Material'/Game/ParagonMinions/Characters/Minions/Down_Minions/Materials/Shared/M_Dawn_Minion_MASTER.M_Dawn_Minion_MASTER'"));
+	MaterialB_P = MaterialBlackPawn.Object;
+	MaterialW_P = MaterialWhitePawn.Object;
+
 	
-	static ConstructorHelpers::FObjectFinder<USkeletalMesh> Pawn(TEXT("SkeletalMesh'/Game/ParagonSevarog/Characters/Heroes/Sevarog/Meshes/Sevarog.Sevarog'"));
+	
+	static ConstructorHelpers::FObjectFinder<USkeletalMesh> Pawn(TEXT("SkeletalMesh'/Game/ParagonMinions/Characters/Minions/Down_Minions/Meshes/Minion_Lane_Super_Dawn.Minion_Lane_Super_Dawn'"));
 	static ConstructorHelpers::FObjectFinder<USkeletalMesh> Castle(TEXT("SkeletalMesh'/Game/ParagonSevarog/Characters/Heroes/Sevarog/Meshes/Sevarog.Sevarog'"));
 	PawnMesh = Pawn.Object;
 	CastleMesh = Castle.Object;
@@ -46,16 +53,25 @@ void APiece::Tick(float DeltaTime)
 
 }
 
-void APiece::ChangeMaterial(EColour Colour)
+void APiece::ChangeMaterial(EColour Colour, EPieceType Piece)
 {
-	if (Colour == EColour::C_Black)
+	if (Piece != EPieceType::PT_Pawn &&  Colour == EColour::C_Black)
 	{
 		SkeletalMeshComponent->SetMaterial(0, MaterialB);
 	}
-	if (Colour == EColour::C_White)
+	if (Piece != EPieceType::PT_Pawn && Colour == EColour::C_White)
 	{
 		SkeletalMeshComponent->SetMaterial(0, MaterialW);
 	}
+	if (Piece == EPieceType::PT_Pawn && Colour == EColour::C_Black)
+	{
+		SkeletalMeshComponent->SetMaterial(0, MaterialB_P);
+	}
+	if (Piece == EPieceType::PT_Pawn && Colour == EColour::C_White)
+	{
+		SkeletalMeshComponent->SetMaterial(0, MaterialW_P);
+	}
+	
 }
 
 void APiece::ChangeMesh(EPieceType Piece)
