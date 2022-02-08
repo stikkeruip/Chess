@@ -46,27 +46,33 @@ void UPieceMovementComponent::TickComponent(float DeltaTime, ELevelTick TickType
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 	
-	TimePassed += DeltaTime;
-	
-	if(bMoved)
+	if(bMoved && !bAttacking)
 	{
 		if (bAttacked && CanAttack())
 		{
-			bMoved = false;
+			bAttacked = false;
 			bAttacking = true;
-		}
-		if (TimePassed < TimeToMove)
-		{
-			FVector CurrentLocation = FMath::Lerp(InitialPosition, EndPosition, FMath::Clamp(TimePassed/TimeToMove, 0.0f, 1.0f));
-			GetOwner()->SetActorLocation(CurrentLocation);
+			bMoved = false;
+			UE_LOG(LogTemp, Warning, TEXT("Attacking"));
 		}
 		else
 		{
-			InitialPosition = GetOwner()->GetActorLocation();
-			bMoved = false;
-			PieceState = EPieceState::PS_Unselected;
-			PieceStateChange.Broadcast(Colour, PieceState);
-			ChessRuleSubsystem->EndTurn(Colour);
+			UE_LOG(LogTemp, Warning, TEXT("Moving"));
+			TimePassed += DeltaTime;
+			if (TimePassed < TimeToMove)
+			{
+				FVector CurrentLocation = FMath::Lerp(InitialPosition, EndPosition, FMath::Clamp(TimePassed/TimeToMove, 0.0f, 1.0f));
+				GetOwner()->SetActorLocation(CurrentLocation);
+			}
+			else
+			{
+				UE_LOG(LogTemp, Warning, TEXT("End moving"));
+				InitialPosition = GetOwner()->GetActorLocation();
+				bMoved = false;
+				PieceState = EPieceState::PS_Unselected;
+				PieceStateChange.Broadcast(Colour, PieceState);
+				ChessRuleSubsystem->EndTurn(Colour);
+			}
 		}
 	}
 }
