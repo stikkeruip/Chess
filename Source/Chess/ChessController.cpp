@@ -39,10 +39,7 @@ bool AChessController::IsInSameGrid(FVector CurrentPosition, FVector TargetPosit
 	{
 		return true;
 	}
-	else
-	{
-		return false;
-	}
+	return false;
 }
 
 void AChessController::DisplayMoves(FVector StartLocation, EPieceType PieceType, EColour PieceColour)
@@ -70,6 +67,21 @@ void AChessController::DisplayMoves(FVector StartLocation, EPieceType PieceType,
 				}
 			}
 		}
+	}
+	if (PieceType == EPieceType::PT_Bishop)
+	{
+		for (int DirectionIndex = 0; DirectionIndex < DirectionNum; DirectionIndex++)
+		{
+			GetWorld()->LineTraceSingleByChannel(
+				HitResult, StartLocation + FVector(XDiagonalOffset[DirectionIndex], YDiagonalOffset[DirectionIndex], 30.f),
+				StartLocation + FVector(XDiagonalDir[DirectionIndex], YDiagonalDir[DirectionIndex], 30.f), ECC_Pawn, TraceParams);
+			if (HitResult.GetActor() && HitResult.GetActor() != PieceBeingMoved)
+			{
+				FVector TargetPosition = HitResult.GetActor()->GetActorLocation();
+			}
+			DrawDebugLine(GetWorld(), StartLocation + FVector(XDiagonalOffset[DirectionIndex], YDiagonalOffset[DirectionIndex], 30.f), StartLocation + FVector(XDiagonalDir[DirectionIndex], YDiagonalDir[DirectionIndex], 30.f), FColor(255, 0, 0), false, 5);
+		}
+			
 	}
 	if(PieceType == EPieceType::PT_Pawn)
 	{

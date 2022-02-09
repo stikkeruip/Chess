@@ -35,6 +35,7 @@ enum class EPieceType
 {
 	PT_Pawn = 0		UMETA(DisplayName = "Pawn"),
 	PT_Castle = 1	UMETA(DisplayName = "Castle"),
+	PT_Bishop = 2	UMETA(DisplayName = "Bishop"),
 };
 
 class UPieceMovementComponent;

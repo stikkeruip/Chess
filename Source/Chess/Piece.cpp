@@ -10,10 +10,12 @@ APiece::APiece()
 {
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = false;
-
 	
-	SkeletalMeshComponent = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("StaticMeshComponent"));
-	SkeletalMeshComponent->SetupAttachment(RootComponent);
+	StaticMeshComponent = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("StaticMeshComponent"));
+	StaticMeshComponent->SetupAttachment(RootComponent);
+
+	//SkeletalMeshComponent = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("SkeletalMeshComponent"));
+	//SkeletalMeshComponent->SetupAttachment(RootComponent);
 	
 	BoxComponent = CreateDefaultSubobject<UBoxComponent>(TEXT("BoxCollision"));
 	BoxComponent->SetupAttachment(SkeletalMeshComponent);	
@@ -23,17 +25,19 @@ APiece::APiece()
 	MaterialB = MaterialBlack.Object;
 	MaterialW = MaterialWhite.Object;
 
-	static ConstructorHelpers::FObjectFinder<UMaterialInterface> MaterialBlackPawn(TEXT("MaterialInstanceConstant'/Game/ParagonMinions/Characters/Minions/Dusk_Minions/Materials/Super/MI_Minion_Dusk_Super.MI_Minion_Dusk_Super'"));
-	static ConstructorHelpers::FObjectFinder<UMaterialInterface> MaterialWhitePawn(TEXT("Material'/Game/ParagonMinions/Characters/Minions/Down_Minions/Materials/Shared/M_Dawn_Minion_MASTER.M_Dawn_Minion_MASTER'"));
-	MaterialB_P = MaterialBlackPawn.Object;
-	MaterialW_P = MaterialWhitePawn.Object;
+	//static ConstructorHelpers::FObjectFinder<UMaterialInterface> MaterialBlackPawn(TEXT("MaterialInstanceConstant'/Game/ParagonMinions/Characters/Minions/Dusk_Minions/Materials/Super/MI_Minion_Dusk_Super.MI_Minion_Dusk_Super'"));
+	//static ConstructorHelpers::FObjectFinder<UMaterialInterface> MaterialWhitePawn(TEXT("Material'/Game/ParagonMinions/Characters/Minions/Down_Minions/Materials/Shared/M_Dawn_Minion_MASTER.M_Dawn_Minion_MASTER'"));
+	//MaterialB_P = MaterialBlackPawn.Object;
+	//MaterialW_P = MaterialWhitePawn.Object;
 
 	
 	
-	static ConstructorHelpers::FObjectFinder<USkeletalMesh> Pawn(TEXT("SkeletalMesh'/Game/ParagonMinions/Characters/Minions/Down_Minions/Meshes/Minion_Lane_Super_Dawn.Minion_Lane_Super_Dawn'"));
-	static ConstructorHelpers::FObjectFinder<USkeletalMesh> Castle(TEXT("SkeletalMesh'/Game/ParagonSevarog/Characters/Heroes/Sevarog/Meshes/Sevarog.Sevarog'"));
+	static ConstructorHelpers::FObjectFinder<UStaticMesh> Pawn(TEXT("StaticMesh'/Game/StarterContent/Shapes/Shape_Cone.Shape_Cone'"));
+	static ConstructorHelpers::FObjectFinder<UStaticMesh> Castle(TEXT("StaticMesh'/Game/StarterContent/Shapes/Shape_Cube.Shape_Cube'"));
+	static ConstructorHelpers::FObjectFinder<UStaticMesh>Bishop(TEXT("StaticMesh'/Game/StarterContent/Shapes/Shape_NarrowCapsule.Shape_NarrowCapsule'"));
 	PawnMesh = Pawn.Object;
 	CastleMesh = Castle.Object;
+	BishopMesh = Bishop.Object;
 	
 	
 }
@@ -55,22 +59,22 @@ void APiece::Tick(float DeltaTime)
 
 void APiece::ChangeMaterial(EColour Colour, EPieceType Piece)
 {
-	if (Piece != EPieceType::PT_Pawn &&  Colour == EColour::C_Black)
+	if (Colour == EColour::C_Black)
 	{
-		SkeletalMeshComponent->SetMaterial(0, MaterialB);
+		StaticMeshComponent->SetMaterial(0, MaterialB);
 	}
-	if (Piece != EPieceType::PT_Pawn && Colour == EColour::C_White)
+	if (Colour == EColour::C_White)
 	{
-		SkeletalMeshComponent->SetMaterial(0, MaterialW);
+		StaticMeshComponent->SetMaterial(0, MaterialW);
 	}
-	if (Piece == EPieceType::PT_Pawn && Colour == EColour::C_Black)
-	{
-		SkeletalMeshComponent->SetMaterial(0, MaterialB_P);
-	}
-	if (Piece == EPieceType::PT_Pawn && Colour == EColour::C_White)
-	{
-		SkeletalMeshComponent->SetMaterial(0, MaterialW_P);
-	}
+	//if (Piece == EPieceType::PT_Pawn && Colour == EColour::C_Black)
+	//{
+	//	SkeletalMeshComponent->SetMaterial(0, MaterialB_P);
+	//}
+	//if (Piece == EPieceType::PT_Pawn && Colour == EColour::C_White)
+	//{
+	//	SkeletalMeshComponent->SetMaterial(0, MaterialW_P);
+	//}
 	
 }
 
@@ -78,11 +82,15 @@ void APiece::ChangeMesh(EPieceType Piece)
 {
 	if (Piece == EPieceType::PT_Pawn)
 	{
-		SkeletalMeshComponent->SetSkeletalMesh(PawnMesh);
+		StaticMeshComponent->SetStaticMesh(PawnMesh);
 	}
 	if (Piece == EPieceType::PT_Castle)
 	{
-		SkeletalMeshComponent->SetSkeletalMesh(CastleMesh);
+		StaticMeshComponent->SetStaticMesh(CastleMesh);
+	}
+	if (Piece == EPieceType::PT_Bishop)
+	{
+		StaticMeshComponent->SetStaticMesh(BishopMesh);
 	}
 }
 

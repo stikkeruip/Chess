@@ -24,6 +24,9 @@ protected:
 	UPROPERTY(EditInstanceOnly, BlueprintReadOnly)
 	USkeletalMeshComponent* SkeletalMeshComponent;
 
+	UPROPERTY(EditInstanceOnly, BlueprintReadOnly)
+	UStaticMeshComponent* StaticMeshComponent;
+
 	UPROPERTY(EditAnywhere)
 	UBoxComponent* BoxComponent;
 
@@ -35,8 +38,9 @@ protected:
 	UMaterialInterface* MaterialB_P;
 	UMaterialInterface* MaterialW_P;
 	
-	USkeletalMesh* PawnMesh;
-	USkeletalMesh* CastleMesh;
+	UStaticMesh* PawnMesh;
+	UStaticMesh* CastleMesh;
+	UStaticMesh* BishopMesh;
 
 	
 

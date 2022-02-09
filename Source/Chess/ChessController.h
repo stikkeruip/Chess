@@ -47,8 +47,13 @@ class CHESS_API AChessController : public APlayerController
 	const int GRID_SIZE = 100;
 	float XDir[4] = {0.f, 0.f, 800.f, -800.f};
 	float YDir[4] = {800.f, -800.f, 0.f, 0.f};
+	float XDiagonalDir[4] = {800.f, 800.f, -800.f, -800.f};
+	float YDiagonalDir[4] = {800.f, -800.f, 800.f, -800.f};
 	float XStartOffset [4] = {0.f, 0.f, 60.f, -60.f};
 	float YStartOffset [4] = {60.f, -60.f, 0.f, 0.f};
+	float XDiagonalOffset [4] = {60.f, 60.f, -60.f, -60.f};
+	float YDiagonalOffset [4] = {60.f, -60.f, 60.f, -60.f};
+	
 	int StepOffsetX[4] = {0, 0, GRID_SIZE, -GRID_SIZE};
 	int StepOffsetY[4] = {GRID_SIZE, -GRID_SIZE, 0, 0};
 
