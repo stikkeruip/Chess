@@ -53,11 +53,9 @@ void UPieceMovementComponent::TickComponent(float DeltaTime, ELevelTick TickType
 			bAttacked = false;
 			bAttacking = true;
 			bMoved = false;
-			UE_LOG(LogTemp, Warning, TEXT("Attacking"));
 		}
 		else
 		{
-			UE_LOG(LogTemp, Warning, TEXT("Moving"));
 			TimePassed += DeltaTime;
 			if (TimePassed < TimeToMove)
 			{
