@@ -78,10 +78,15 @@ void AChessController::DisplayMoves(FVector StartLocation, EPieceType PieceType,
 			if (HitResult.GetActor() && HitResult.GetActor() != PieceBeingMoved)
 			{
 				FVector TargetPosition = HitResult.GetActor()->GetActorLocation();
+				FVector DeltaVector = FVector(StepOffsetDiagonalX[DirectionIndex], StepOffsetDiagonalY[DirectionIndex], 0.0f);
+				FVector FirstCheckPosition = StartLocation + DeltaVector;
+				for (FVector CurrentPosition = FirstCheckPosition; !IsInSameGrid(CurrentPosition, TargetPosition); CurrentPosition += DeltaVector)
+				{
+					AActor* SpawnedActor = GetWorld()->SpawnActor(ActorToSpawn, &CurrentPosition, &Rotation);
+					SpawnedActors.Add(SpawnedActor);
+				}
 			}
-			DrawDebugLine(GetWorld(), StartLocation + FVector(XDiagonalOffset[DirectionIndex], YDiagonalOffset[DirectionIndex], 30.f), StartLocation + FVector(XDiagonalDir[DirectionIndex], YDiagonalDir[DirectionIndex], 30.f), FColor(255, 0, 0), false, 5);
 		}
-			
 	}
 	if(PieceType == EPieceType::PT_Pawn)
 	{
@@ -114,10 +119,7 @@ float AChessController::PositionOnDirection(FVector Vector, int DirectionIndex)
 	{
 		return Vector.Y;
 	}
-	else
-	{
-		return Vector.X;
-	}
+	return Vector.X;
 }
 
 void AChessController::SetupInputComponent()
@@ -138,7 +140,6 @@ void AChessController::SetupInputComponent()
 void AChessController::OnMouseClick()
 {
 	FHitResult HitResult;
-	FHitResult Start;
 	FCollisionQueryParams TraceParams;
 	
 	if (GetHitResultUnderCursor(ECollisionChannel::ECC_Pawn, true, HitResult) && (!Piece || !Piece->GetMoved()))

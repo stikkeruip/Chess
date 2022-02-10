@@ -59,16 +59,7 @@ bool UChessRuleSubsystem::CheckMovementValid(EPieceType PieceType, EColour Colou
 
 	if(Colour == CurrentColour)
 	{
-		if (PieceType == EPieceType::PT_Pawn && F_X == CurrentGridX && (F_Y == CurrentGridY + 1 && Colour == EColour::C_White || F_Y == CurrentGridY - 1 && Colour == EColour::C_Black))
-		{
-			return true;
-		}
-		if (PieceType == EPieceType::PT_Castle && (F_X >= 1 && F_X <= 8 && F_Y == CurrentGridY || F_Y >= 1 && F_Y <= 8 && F_X == CurrentGridX))
-		{
-			return true;
-		}
-
-		return false;
+		return true;
 	}
 
 	return false;

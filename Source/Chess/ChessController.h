@@ -57,6 +57,9 @@ class CHESS_API AChessController : public APlayerController
 	int StepOffsetX[4] = {0, 0, GRID_SIZE, -GRID_SIZE};
 	int StepOffsetY[4] = {GRID_SIZE, -GRID_SIZE, 0, 0};
 
+	int StepOffsetDiagonalX[4] = {GRID_SIZE, GRID_SIZE, -GRID_SIZE, -GRID_SIZE};
+	int StepOffsetDiagonalY[4] = {GRID_SIZE, -GRID_SIZE, GRID_SIZE, -GRID_SIZE};
+
 	TArray<AActor*> SpawnedActors;
 
 	
