@@ -41,6 +41,9 @@ protected:
 	UStaticMesh* PawnMesh;
 	UStaticMesh* CastleMesh;
 	UStaticMesh* BishopMesh;
+	UStaticMesh* QueenMesh;
+	UStaticMesh* KingMesh;
+	UStaticMesh* KnightMesh;
 
 	
 

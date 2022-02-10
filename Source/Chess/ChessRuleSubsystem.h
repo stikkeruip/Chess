@@ -36,6 +36,9 @@ enum class EPieceType
 	PT_Pawn = 0		UMETA(DisplayName = "Pawn"),
 	PT_Castle = 1	UMETA(DisplayName = "Castle"),
 	PT_Bishop = 2	UMETA(DisplayName = "Bishop"),
+	PT_Queen = 3	UMETA(DisplayName = "Queen"),
+	PT_Knight = 4	UMETA(DisplayName = "Knight"),
+	PT_King = 5		UMETA(DisplayName = "King")
 };
 
 class UPieceMovementComponent;
@@ -52,7 +55,7 @@ public:
 	
 	void InstructionCompleted(EColour Colour, EPieceState PieceState);
 
-	bool CheckMovementValid(EPieceType PieceType, EColour Colour,float F_X, float F_Y, FVector CurrentGrid);
+	bool CheckMovementValid(EColour Colour);
 
 	void AddPiece(UPieceMovementComponent* Piece);
 

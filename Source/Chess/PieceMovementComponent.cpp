@@ -82,7 +82,7 @@ bool UPieceMovementComponent::CanAttack()
 
 bool UPieceMovementComponent::SetEndPosition(FVector Pos)
 {
-	if(ChessRuleSubsystem->CheckMovementValid(Piece_Type, Colour, Pos.X, Pos.Y, GetGridPosition()))
+	if(ChessRuleSubsystem->CheckMovementValid(Colour))
 	{
 		EndPosition = Pos;
 		return true;
@@ -103,7 +103,7 @@ void UPieceMovementComponent::Attack(UPieceMovementComponent* PieceMovementCompo
 {
 	ChessRuleSubsystem->RemovePiece(PieceMovementComponent);
 
-	bAttacked = true;
+	//bAttacked = true;
 	SetMoved();
 }
 

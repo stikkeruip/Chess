@@ -53,12 +53,12 @@ void AChessController::DisplayMoves(FVector StartLocation, EPieceType PieceType,
 		for (int DirectionIndex = 0; DirectionIndex < DirectionNum; DirectionIndex++)
 		{
 			GetWorld()->LineTraceSingleByChannel(
-				HitResult, StartLocation + FVector(XStartOffset[DirectionIndex], YStartOffset[DirectionIndex], 20.f),
-				StartLocation + FVector(XDir[DirectionIndex], YDir[DirectionIndex], 20.f), ECC_Pawn, TraceParams);
+				HitResult, StartLocation + FVector(XStraightOffset[DirectionIndex], YStraightOffset[DirectionIndex], 20.f),
+				StartLocation + FVector(XStraightDir[DirectionIndex], YStraightDir[DirectionIndex], 20.f), ECC_Pawn, TraceParams);
 			if (HitResult.GetActor() && HitResult.GetActor() != PieceBeingMoved)
 			{
 				FVector TargetPosition = HitResult.GetActor()->GetActorLocation();
-				FVector DeltaVector = FVector(StepOffsetX[DirectionIndex], StepOffsetY[DirectionIndex], 0.0f);
+				FVector DeltaVector = FVector(StepOffsetStraightX[DirectionIndex], StepOffsetStraightY[DirectionIndex], 0.0f);
 				FVector FirstCheckPosition = StartLocation + DeltaVector;
 				for (FVector CurrentPosition = FirstCheckPosition; !IsInSameGrid(CurrentPosition, TargetPosition); CurrentPosition += DeltaVector)
 				{
@@ -88,7 +88,74 @@ void AChessController::DisplayMoves(FVector StartLocation, EPieceType PieceType,
 			}
 		}
 	}
-	if(PieceType == EPieceType::PT_Pawn)
+	if (PieceType == EPieceType::PT_Queen)
+	{
+		for (int DirectionIndex = 0; DirectionIndex < DirectionNum; DirectionIndex++)
+		{
+			GetWorld()->LineTraceSingleByChannel(
+				HitResult, StartLocation + FVector(XDiagonalOffset[DirectionIndex], YDiagonalOffset[DirectionIndex], 30.f),
+				StartLocation + FVector(XDiagonalDir[DirectionIndex], YDiagonalDir[DirectionIndex], 30.f), ECC_Pawn, TraceParams);
+			if (HitResult.GetActor() && HitResult.GetActor() != PieceBeingMoved)
+			{
+				FVector TargetPosition = HitResult.GetActor()->GetActorLocation();
+				FVector DeltaVector = FVector(StepOffsetDiagonalX[DirectionIndex], StepOffsetDiagonalY[DirectionIndex], 0.0f);
+				FVector FirstCheckPosition = StartLocation + DeltaVector;
+				for (FVector CurrentPosition = FirstCheckPosition; !IsInSameGrid(CurrentPosition, TargetPosition); CurrentPosition += DeltaVector)
+				{
+					AActor* SpawnedActor = GetWorld()->SpawnActor(ActorToSpawn, &CurrentPosition, &Rotation);
+					SpawnedActors.Add(SpawnedActor);
+				}
+			}
+		}
+		for (int DirectionIndex = 0; DirectionIndex < DirectionNum; DirectionIndex++)
+		{
+			GetWorld()->LineTraceSingleByChannel(
+				HitResult, StartLocation + FVector(XStraightOffset[DirectionIndex], YStraightOffset[DirectionIndex], 20.f),
+				StartLocation + FVector(XStraightDir[DirectionIndex], YStraightDir[DirectionIndex], 20.f), ECC_Pawn, TraceParams);
+			if (HitResult.GetActor() && HitResult.GetActor() != PieceBeingMoved)
+			{
+				FVector TargetPosition = HitResult.GetActor()->GetActorLocation();
+				FVector DeltaVector = FVector(StepOffsetStraightX[DirectionIndex], StepOffsetStraightY[DirectionIndex], 0.0f);
+				FVector FirstCheckPosition = StartLocation + DeltaVector;
+				for (FVector CurrentPosition = FirstCheckPosition; !IsInSameGrid(CurrentPosition, TargetPosition); CurrentPosition += DeltaVector)
+				{
+					AActor* SpawnedActor = GetWorld()->SpawnActor(ActorToSpawn, &CurrentPosition, &Rotation);
+					SpawnedActors.Add(SpawnedActor);
+				}
+			}
+		}
+	}
+	if (PieceType == EPieceType::PT_King)
+	{
+		for (int DirectionIndex = 0; DirectionIndex < DirectionNum; DirectionIndex++)
+		{
+			FVector CurrentPosition = StartLocation + FVector(XKingDirStraight[DirectionIndex], YKingDirStraight[DirectionIndex], 0.f);
+			AActor* SpawnedActor = GetWorld()->SpawnActor(ActorToSpawn, &CurrentPosition, &Rotation);
+			SpawnedActors.Add(SpawnedActor);
+		}
+		for (int DirectionIndex = 0; DirectionIndex < DirectionNum; DirectionIndex++)
+		{
+			FVector CurrentPosition = StartLocation + FVector(XKingDirDiagonal[DirectionIndex], YKingDirDiagonal[DirectionIndex], 0.f);
+			AActor* SpawnedActor = GetWorld()->SpawnActor(ActorToSpawn, &CurrentPosition, &Rotation);
+			SpawnedActors.Add(SpawnedActor);
+		}
+	}
+	if (PieceType == EPieceType::PT_Knight)
+	{
+		for (int DirectionIndex = 0; DirectionIndex < DirectionNum; DirectionIndex++)
+		{
+			FVector CurrentPosition = StartLocation + FVector(XKnightDir[DirectionIndex], YKnightDir[DirectionIndex], 0.f);
+			AActor* SpawnedActor = GetWorld()->SpawnActor(ActorToSpawn, &CurrentPosition, &Rotation);
+			SpawnedActors.Add(SpawnedActor);
+		}
+		for (int DirectionIndex = 0; DirectionIndex < DirectionNum; DirectionIndex++)
+		{
+			FVector CurrentPosition = StartLocation + FVector(YKnightDir[DirectionIndex], XKnightDir[DirectionIndex], 0.f);
+			AActor* SpawnedActor = GetWorld()->SpawnActor(ActorToSpawn, &CurrentPosition, &Rotation);
+			SpawnedActors.Add(SpawnedActor);
+		}
+	}
+	if (PieceType == EPieceType::PT_Pawn)
 	{
 		if(PieceColour == EColour::C_White)
 		{
@@ -100,7 +167,7 @@ void AChessController::DisplayMoves(FVector StartLocation, EPieceType PieceType,
 				SpawnedActors.Add(SpawnedActor);
 			}
 		}
-		if(PieceColour == EColour::C_Black)
+		if (PieceColour == EColour::C_Black)
 		{
 			GetWorld()->LineTraceSingleByChannel(HitResult, StartLocation + FVector(0.f, -60.f, 20.f), StartLocation + FVector(0.f, -100.f, 20.f), ECC_Pawn, TraceParams);
 			if (!HitResult.GetActor())

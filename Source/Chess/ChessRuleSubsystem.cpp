@@ -49,14 +49,8 @@ void UChessRuleSubsystem::EndTurn(EColour Colour)
 }
 
 
-bool UChessRuleSubsystem::CheckMovementValid(EPieceType PieceType, EColour Colour, float F_X, float F_Y, FVector CurrentGrid)
+bool UChessRuleSubsystem::CheckMovementValid(EColour Colour)
 {
-	int CurrentGridX = round(abs(CurrentGrid.X)/100);
-	int CurrentGridY = round(abs(CurrentGrid.Y)/100);
-	
-	F_X = round(abs(F_X)/100);
-	F_Y = round(abs(F_Y)/100);
-
 	if(Colour == CurrentColour)
 	{
 		return true;

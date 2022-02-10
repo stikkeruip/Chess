@@ -35,9 +35,15 @@ APiece::APiece()
 	static ConstructorHelpers::FObjectFinder<UStaticMesh> Pawn(TEXT("StaticMesh'/Game/StarterContent/Shapes/Shape_Cone.Shape_Cone'"));
 	static ConstructorHelpers::FObjectFinder<UStaticMesh> Castle(TEXT("StaticMesh'/Game/StarterContent/Shapes/Shape_Cube.Shape_Cube'"));
 	static ConstructorHelpers::FObjectFinder<UStaticMesh>Bishop(TEXT("StaticMesh'/Game/StarterContent/Shapes/Shape_NarrowCapsule.Shape_NarrowCapsule'"));
+	static ConstructorHelpers::FObjectFinder<UStaticMesh>Queen(TEXT("StaticMesh'/Game/StarterContent/Shapes/Shape_Wedge_A.Shape_Wedge_A'"));
+	static ConstructorHelpers::FObjectFinder<UStaticMesh>King(TEXT("StaticMesh'/Game/StarterContent/Shapes/Shape_WideCapsule.Shape_WideCapsule'"));
+	static ConstructorHelpers::FObjectFinder<UStaticMesh>Knight(TEXT("StaticMesh'/Game/StarterContent/Shapes/Shape_Wedge_B.Shape_Wedge_B'"));
 	PawnMesh = Pawn.Object;
 	CastleMesh = Castle.Object;
 	BishopMesh = Bishop.Object;
+	QueenMesh = Queen.Object;
+	KingMesh = King.Object;
+	KnightMesh = Knight.Object;
 	
 	
 }
@@ -91,6 +97,18 @@ void APiece::ChangeMesh(EPieceType Piece)
 	if (Piece == EPieceType::PT_Bishop)
 	{
 		StaticMeshComponent->SetStaticMesh(BishopMesh);
+	}
+	if (Piece == EPieceType::PT_Queen)
+	{
+		StaticMeshComponent->SetStaticMesh(QueenMesh);
+	}
+	if (Piece == EPieceType::PT_King)
+	{
+		StaticMeshComponent->SetStaticMesh(KingMesh);
+	}
+	if (Piece == EPieceType::PT_Knight)
+	{
+		StaticMeshComponent->SetStaticMesh(KnightMesh);
 	}
 }
 
