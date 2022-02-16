@@ -37,6 +37,8 @@ protected:
 
 	bool bAttacking;
 
+	bool bFirstMove;
+
 	FVector CurrentGrid;
 
 	UPROPERTY(EditAnywhere)
@@ -65,6 +67,8 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	void SetAttacking(bool Attacking) { bAttacking = Attacking; bAttacked = false; bMoved = true;}
+
+	bool GetFirstMove() { return bFirstMove; }
 	
 	bool CanAttack();
 

@@ -11,11 +11,11 @@ APiece::APiece()
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = false;
 	
-	StaticMeshComponent = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("StaticMeshComponent"));
-	StaticMeshComponent->SetupAttachment(RootComponent);
+	//StaticMeshComponent = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("StaticMeshComponent"));
+	//StaticMeshComponent->SetupAttachment(RootComponent);
 
-	//SkeletalMeshComponent = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("SkeletalMeshComponent"));
-	//SkeletalMeshComponent->SetupAttachment(RootComponent);
+	SkeletalMeshComponent = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("SkeletalMeshComponent"));
+	SkeletalMeshComponent->SetupAttachment(RootComponent);
 	
 	BoxComponent = CreateDefaultSubobject<UBoxComponent>(TEXT("BoxCollision"));
 	BoxComponent->SetupAttachment(SkeletalMeshComponent);	
@@ -34,7 +34,7 @@ APiece::APiece()
 	
 	static ConstructorHelpers::FObjectFinder<UStaticMesh> Pawn(TEXT("StaticMesh'/Game/StarterContent/Shapes/Shape_Cone.Shape_Cone'"));
 	static ConstructorHelpers::FObjectFinder<UStaticMesh> Castle(TEXT("StaticMesh'/Game/StarterContent/Shapes/Shape_Cube.Shape_Cube'"));
-	static ConstructorHelpers::FObjectFinder<UStaticMesh>Bishop(TEXT("StaticMesh'/Game/StarterContent/Shapes/Shape_NarrowCapsule.Shape_NarrowCapsule'"));
+	static ConstructorHelpers::FObjectFinder<USkeletalMesh>Bishop(TEXT("SkeletalMesh'/Game/ParagonSevarog/Characters/Heroes/Sevarog/Meshes/Sevarog.Sevarog'"));
 	static ConstructorHelpers::FObjectFinder<UStaticMesh>Queen(TEXT("StaticMesh'/Game/StarterContent/Shapes/Shape_Wedge_A.Shape_Wedge_A'"));
 	static ConstructorHelpers::FObjectFinder<UStaticMesh>King(TEXT("StaticMesh'/Game/StarterContent/Shapes/Shape_WideCapsule.Shape_WideCapsule'"));
 	static ConstructorHelpers::FObjectFinder<UStaticMesh>Knight(TEXT("StaticMesh'/Game/StarterContent/Shapes/Shape_Wedge_B.Shape_Wedge_B'"));
@@ -67,11 +67,11 @@ void APiece::ChangeMaterial(EColour Colour, EPieceType Piece)
 {
 	if (Colour == EColour::C_Black)
 	{
-		StaticMeshComponent->SetMaterial(0, MaterialB);
+		SkeletalMeshComponent->SetMaterial(0, MaterialB);
 	}
 	if (Colour == EColour::C_White)
 	{
-		StaticMeshComponent->SetMaterial(0, MaterialW);
+		SkeletalMeshComponent->SetMaterial(0, MaterialW);
 	}
 	//if (Piece == EPieceType::PT_Pawn && Colour == EColour::C_Black)
 	//{
@@ -96,7 +96,7 @@ void APiece::ChangeMesh(EPieceType Piece)
 	}
 	if (Piece == EPieceType::PT_Bishop)
 	{
-		StaticMeshComponent->SetStaticMesh(BishopMesh);
+		SkeletalMeshComponent->SetSkeletalMesh(BishopMesh);
 	}
 	if (Piece == EPieceType::PT_Queen)
 	{
@@ -113,13 +113,18 @@ void APiece::ChangeMesh(EPieceType Piece)
 }
 
 void APiece::BeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp,
-	int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
+                          int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
 	MovementComponent = OtherActor->FindComponentByClass<UPieceMovementComponent>();
 
 	if(MovementComponent && MovementComponent->GetColour() != FindComponentByClass<UPieceMovementComponent>()->GetColour())
 		OtherActor->Destroy();
 	
+}
+
+bool APiece::GetFirstMove()
+{
+	return this->FindComponentByClass<UPieceMovementComponent>()->GetFirstMove();
 }
 
 

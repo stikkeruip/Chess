@@ -40,7 +40,7 @@ protected:
 	
 	UStaticMesh* PawnMesh;
 	UStaticMesh* CastleMesh;
-	UStaticMesh* BishopMesh;
+	USkeletalMesh* BishopMesh;
 	UStaticMesh* QueenMesh;
 	UStaticMesh* KingMesh;
 	UStaticMesh* KnightMesh;
@@ -54,6 +54,8 @@ public:
 	void ChangeMaterial(EColour Colour, EPieceType Piece);
 
 	void ChangeMesh(EPieceType Piece);
+
+	bool GetFirstMove();
 
 	UFUNCTION( )
 	void BeginOverlap(UPrimitiveComponent* OverlappedComponent, 

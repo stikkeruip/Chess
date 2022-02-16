@@ -157,22 +157,19 @@ void AChessController::DisplayMoves(FVector StartLocation, EPieceType PieceType,
 	}
 	if (PieceType == EPieceType::PT_Pawn)
 	{
-		if(PieceColour == EColour::C_White)
+		float MoveDirection;
+		float MoveDistance;
+
+		MoveDistance = Piece->GetFirstMove() ? 200.f : 100.f;
+
+		MoveDirection = PieceColour == EColour::C_White ? 1 : -1;
+		
+		for(int i = 100; i <= MoveDistance; i+= 100)
 		{
-			GetWorld()->LineTraceSingleByChannel(HitResult, StartLocation + FVector(0.f, 60.f, 20.f), StartLocation + FVector(0.f, 100.f, 20.f), ECC_Pawn, TraceParams);
+			GetWorld()->LineTraceSingleByChannel(HitResult, StartLocation + FVector(0.f, MoveDirection * 60.f, 20.f), StartLocation + FVector(0.f, MoveDistance * MoveDirection, 20.f), ECC_Pawn, TraceParams);
 			if (!HitResult.GetActor() && HitResult.GetActor() != PieceBeingMoved)
 			{
-				FVector SpawnPosition = StartLocation + FVector(0.f, 100.f, 20.f);
-				AActor* SpawnedActor = GetWorld()->SpawnActor(ActorToSpawn, &SpawnPosition, &Rotation);
-				SpawnedActors.Add(SpawnedActor);
-			}
-		}
-		if (PieceColour == EColour::C_Black)
-		{
-			GetWorld()->LineTraceSingleByChannel(HitResult, StartLocation + FVector(0.f, -60.f, 20.f), StartLocation + FVector(0.f, -100.f, 20.f), ECC_Pawn, TraceParams);
-			if (!HitResult.GetActor())
-			{
-				FVector SpawnPosition = StartLocation + FVector(0.f, -100.f, 20.f);
+				FVector SpawnPosition = StartLocation + FVector(0.f, i * MoveDirection, 20.f);
 				AActor* SpawnedActor = GetWorld()->SpawnActor(ActorToSpawn, &SpawnPosition, &Rotation);
 				SpawnedActors.Add(SpawnedActor);
 			}

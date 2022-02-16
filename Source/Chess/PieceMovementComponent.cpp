@@ -32,6 +32,8 @@ void UPieceMovementComponent::BeginPlay()
 
 	bAttacking = false;
 
+	bFirstMove = true;
+
 	ChessRuleSubsystem = GetWorld()->GetSubsystem<UChessRuleSubsystem>();
 	if(ChessRuleSubsystem)
 	{
@@ -96,6 +98,7 @@ void UPieceMovementComponent::SetMoved()
 	PieceStateChange.Broadcast(Colour, PieceState);
 	
 	bMoved = true;
+	bFirstMove = false;
 	TimePassed = 0;
 }
 
