@@ -55,7 +55,7 @@ public:
 	
 	void InstructionCompleted(EColour Colour, EPieceState PieceState);
 
-	bool CheckMovementValid(EColour Colour);
+	bool CheckMovementValid(EPieceType PieceType, EColour Colour, float F_X, float F_Y, FVector CurrentGrid);
 
 	void AddPiece(UPieceMovementComponent* Piece);
 

@@ -49,11 +49,30 @@ void UChessRuleSubsystem::EndTurn(EColour Colour)
 }
 
 
-bool UChessRuleSubsystem::CheckMovementValid(EColour Colour)
+bool UChessRuleSubsystem::CheckMovementValid(EPieceType PieceType, EColour Colour, float F_X, float F_Y, FVector CurrentGrid)
 {
+	int CurrentGridX = round(abs(CurrentGrid.X)/100);
+	int CurrentGridY = round(abs(CurrentGrid.Y)/100);
+	
+	F_X = round(abs(F_X)/100);
+	F_Y = round(abs(F_Y)/100);
+
 	if(Colour == CurrentColour)
 	{
-		return true;
+		if (PieceType == EPieceType::PT_Pawn && F_X == CurrentGridX && (F_Y == CurrentGridY + 1 && Colour == EColour::C_White || F_Y == CurrentGridY - 1 && Colour == EColour::C_Black))
+		{
+			return true;
+		}
+		if (PieceType == EPieceType::PT_Castle && (F_X >= 1 && F_X <= 8 && F_Y == CurrentGridY || F_Y >= 1 && F_Y <= 8 && F_X == CurrentGridX))
+		{
+			return true;
+		}
+		if (PieceType == EPieceType::PT_Bishop && abs(F_X - CurrentGridX) == abs(F_Y - CurrentGridY))
+		{
+			return true;
+		}
+
+		return false;
 	}
 
 	return false;
