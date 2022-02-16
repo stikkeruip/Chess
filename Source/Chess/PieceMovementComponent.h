@@ -53,6 +53,8 @@ protected:
 
 	APiece* Piece;
 
+	AActor* AttackedActor;
+
 public:	
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
@@ -68,6 +70,9 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void SetAttacking(bool Attacking) { bAttacking = Attacking; bAttacked = false; bMoved = true;}
 
+	UFUNCTION(BlueprintCallable)
+	void DestroyAttackedActor() { AttackedActor->Destroy(); }
+
 	bool GetFirstMove() { return bFirstMove; }
 	
 	bool CanAttack();
@@ -78,7 +83,7 @@ public:
 	
 	void Selected();
 
-	void Attack(UPieceMovementComponent* Piece, AActor* Actor);
+	void Attack(UPieceMovementComponent* Piece);
 
 	EColour GetColour() { return Colour; }
 

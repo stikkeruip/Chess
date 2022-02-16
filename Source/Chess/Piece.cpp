@@ -33,7 +33,7 @@ APiece::APiece()
 	
 	
 	static ConstructorHelpers::FObjectFinder<UStaticMesh> Pawn(TEXT("StaticMesh'/Game/StarterContent/Shapes/Shape_Cone.Shape_Cone'"));
-	static ConstructorHelpers::FObjectFinder<UStaticMesh> Castle(TEXT("StaticMesh'/Game/StarterContent/Shapes/Shape_Cube.Shape_Cube'"));
+	static ConstructorHelpers::FObjectFinder<USkeletalMesh> Castle(TEXT("SkeletalMesh'/Game/ParagonSevarog/Characters/Heroes/Sevarog/Meshes/Sevarog.Sevarog'"));
 	static ConstructorHelpers::FObjectFinder<USkeletalMesh>Bishop(TEXT("SkeletalMesh'/Game/ParagonSevarog/Characters/Heroes/Sevarog/Meshes/Sevarog.Sevarog'"));
 	static ConstructorHelpers::FObjectFinder<UStaticMesh>Queen(TEXT("StaticMesh'/Game/StarterContent/Shapes/Shape_Wedge_A.Shape_Wedge_A'"));
 	static ConstructorHelpers::FObjectFinder<UStaticMesh>King(TEXT("StaticMesh'/Game/StarterContent/Shapes/Shape_WideCapsule.Shape_WideCapsule'"));
@@ -92,7 +92,7 @@ void APiece::ChangeMesh(EPieceType Piece)
 	}
 	if (Piece == EPieceType::PT_Castle)
 	{
-		StaticMeshComponent->SetStaticMesh(CastleMesh);
+		SkeletalMeshComponent->SetSkeletalMesh(CastleMesh);
 	}
 	if (Piece == EPieceType::PT_Bishop)
 	{

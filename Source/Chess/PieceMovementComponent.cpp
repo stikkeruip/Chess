@@ -102,11 +102,12 @@ void UPieceMovementComponent::SetMoved()
 	TimePassed = 0;
 }
 
-void UPieceMovementComponent::Attack(UPieceMovementComponent* PieceMovementComponent, AActor* Actor)
+void UPieceMovementComponent::Attack(UPieceMovementComponent* PieceMovementComponent)
 {
+	AttackedActor = PieceMovementComponent->GetOwner();
 	ChessRuleSubsystem->RemovePiece(PieceMovementComponent);
 
-	//bAttacked = true;
+	bAttacked = true;
 	SetMoved();
 }
 

@@ -243,7 +243,7 @@ void AChessController::OnMouseClick()
 				if(Piece->SetEndPosition(HitLocation))
 				{
 					ClearSpawnedMovementIndicators();
-					Piece->Attack(TempPiece, HitActor);
+					Piece->Attack(TempPiece);
 				}
 			}
 		}

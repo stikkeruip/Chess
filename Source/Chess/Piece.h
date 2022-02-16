@@ -39,7 +39,7 @@ protected:
 	UMaterialInterface* MaterialW_P;
 	
 	UStaticMesh* PawnMesh;
-	UStaticMesh* CastleMesh;
+	USkeletalMesh* CastleMesh;
 	USkeletalMesh* BishopMesh;
 	UStaticMesh* QueenMesh;
 	UStaticMesh* KingMesh;
