@@ -63,14 +63,20 @@ bool UChessRuleSubsystem::CheckMovementValid(EPieceType PieceType, EColour Colou
 		{
 			return true;
 		}
-		if (PieceType == EPieceType::PT_Castle && (F_X >= 1 && F_X <= 8 && F_Y == CurrentGridY || F_Y >= 1 && F_Y <= 8 && F_X == CurrentGridX))
+		if ((PieceType == EPieceType::PT_Castle || PieceType == EPieceType::PT_Queen) && (F_X >= 1 && F_X <= 8 && F_Y == CurrentGridY || F_Y >= 1 && F_Y <= 8 && F_X == CurrentGridX))
 		{
 			return true;
 		}
-		if (PieceType == EPieceType::PT_Bishop && abs(F_X - CurrentGridX) == abs(F_Y - CurrentGridY))
+		if ((PieceType == EPieceType::PT_Bishop || PieceType == EPieceType::PT_Queen) && abs(F_X - CurrentGridX) == abs(F_Y - CurrentGridY))
 		{
 			return true;
 		}
+		if (PieceType == EPieceType::PT_King && F_X == CurrentGridX + 1 || F_Y == CurrentGridY + 1)
+		{
+			return true;
+		}
+		if (PieceType == EPieceType::PT_Knight)
+		
 
 		return false;
 	}
