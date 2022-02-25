@@ -26,9 +26,9 @@ void UPieceMovementComponent::BeginPlay()
 
 	InitialPosition = GetOwner()->GetActorLocation();
 
-	bMoved = false;
+	bMoving = false;
 
-	bAttacked = false;
+	bGoingToAttack = false;
 
 	bAttacking = false;
 
@@ -48,13 +48,13 @@ void UPieceMovementComponent::TickComponent(float DeltaTime, ELevelTick TickType
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 	
-	if(bMoved && !bAttacking)
+	if(bMoving && !bAttacking)
 	{
-		if (bAttacked && CanAttack())
+		if (bGoingToAttack && CanAttack())
 		{
-			bAttacked = false;
+			bGoingToAttack = false;
 			bAttacking = true;
-			bMoved = false;
+			bMoving = false;
 		}
 		else
 		{
@@ -68,7 +68,7 @@ void UPieceMovementComponent::TickComponent(float DeltaTime, ELevelTick TickType
 			{
 				UE_LOG(LogTemp, Warning, TEXT("End moving"));
 				InitialPosition = GetOwner()->GetActorLocation();
-				bMoved = false;
+				bMoving = false;
 				PieceState = EPieceState::PS_Unselected;
 				PieceStateChange.Broadcast(Colour, PieceState);
 				ChessRuleSubsystem->EndTurn(Colour);
@@ -97,7 +97,7 @@ void UPieceMovementComponent::SetMoved()
 	PieceState = EPieceState::PS_Moving;
 	PieceStateChange.Broadcast(Colour, PieceState);
 	
-	bMoved = true;
+	bMoving = true;
 	bFirstMove = false;
 	TimePassed = 0;
 }
@@ -107,7 +107,7 @@ void UPieceMovementComponent::Attack(UPieceMovementComponent* PieceMovementCompo
 	AttackedActor = PieceMovementComponent->GetOwner();
 	ChessRuleSubsystem->RemovePiece(PieceMovementComponent);
 
-	bAttacked = true;
+	bGoingToAttack = true;
 	SetMoved();
 }
 

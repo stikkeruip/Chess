@@ -186,15 +186,6 @@ void AChessController::DisplayMoves(FVector StartLocation, EPieceType PieceType,
 	ChessRuleSubsystem->SetXLimitMax(XYLimits[3].X); 
 }
 
-float AChessController::PositionOnDirection(FVector Vector, int DirectionIndex)
-{
-	if(DirectionIndex == DirectionUp || DirectionIndex == DirectionDown)
-	{
-		return Vector.Y;
-	}
-	return Vector.X;
-}
-
 void AChessController::SetupInputComponent()
 {
 	Super::SetupInputComponent();
@@ -215,7 +206,7 @@ void AChessController::OnMouseClick()
 	FHitResult HitResult;
 	FCollisionQueryParams TraceParams;
 	
-	if (GetHitResultUnderCursor(ECollisionChannel::ECC_Pawn, true, HitResult) && (!Piece || !Piece->GetMoved()))
+	if (GetHitResultUnderCursor(ECC_Pawn, true, HitResult) && (!Piece || !Piece->GetMoved()))
 	{
 		if(HitResult.GetActor())
 		{

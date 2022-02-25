@@ -17,14 +17,10 @@ class CHESS_API AChessController : public APlayerController
 	GENERATED_BODY()
 
 	UChessRuleSubsystem* ChessRuleSubsystem;
-	
-	FVector DesiredPosition;
 
 	virtual void SetupInputComponent() override;
 
 	void OnMouseClick();
-
-	APawn* Player;
 
 	AActor* PieceBeingMoved;
 	

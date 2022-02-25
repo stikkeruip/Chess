@@ -31,9 +31,9 @@ protected:
 
 	float TimePassed;
 
-	bool bMoved;
+	bool bMoving;
 
-	bool bAttacked;
+	bool bGoingToAttack;
 
 	bool bAttacking;
 
@@ -62,13 +62,13 @@ public:
 	bool SetEndPosition(FVector Pos);
 
 	UFUNCTION(BlueprintCallable)
-	bool GetMoved() { return bMoved; }
+	bool GetMoved() { return bMoving; }
 
 	UFUNCTION(BlueprintCallable)
 	bool GetAttacking() { return bAttacking; }
 
 	UFUNCTION(BlueprintCallable)
-	void SetAttacking(bool Attacking) { bAttacking = Attacking; bAttacked = false; bMoved = true;}
+	void SetAttacking(bool Attacking) { bAttacking = Attacking; bGoingToAttack = false; bMoving = true;}
 
 	UFUNCTION(BlueprintCallable)
 	void DestroyAttackedActor() { AttackedActor->Destroy(); }
