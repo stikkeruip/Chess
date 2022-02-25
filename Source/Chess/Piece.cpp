@@ -32,12 +32,12 @@ APiece::APiece()
 
 	
 	
-	static ConstructorHelpers::FObjectFinder<UStaticMesh> Pawn(TEXT("StaticMesh'/Game/StarterContent/Shapes/Shape_Cone.Shape_Cone'"));
+	static ConstructorHelpers::FObjectFinder<USkeletalMesh> Pawn(TEXT("SkeletalMesh'/Game/ParagonSevarog/Characters/Heroes/Sevarog/Meshes/Sevarog.Sevarog'"));
 	static ConstructorHelpers::FObjectFinder<USkeletalMesh> Castle(TEXT("SkeletalMesh'/Game/ParagonSevarog/Characters/Heroes/Sevarog/Meshes/Sevarog.Sevarog'"));
 	static ConstructorHelpers::FObjectFinder<USkeletalMesh>Bishop(TEXT("SkeletalMesh'/Game/ParagonSevarog/Characters/Heroes/Sevarog/Meshes/Sevarog.Sevarog'"));
-	static ConstructorHelpers::FObjectFinder<UStaticMesh>Queen(TEXT("StaticMesh'/Game/StarterContent/Shapes/Shape_Wedge_A.Shape_Wedge_A'"));
-	static ConstructorHelpers::FObjectFinder<UStaticMesh>King(TEXT("StaticMesh'/Game/StarterContent/Shapes/Shape_WideCapsule.Shape_WideCapsule'"));
-	static ConstructorHelpers::FObjectFinder<UStaticMesh>Knight(TEXT("StaticMesh'/Game/StarterContent/Shapes/Shape_Wedge_B.Shape_Wedge_B'"));
+	static ConstructorHelpers::FObjectFinder<USkeletalMesh>Queen(TEXT("SkeletalMesh'/Game/ParagonSevarog/Characters/Heroes/Sevarog/Meshes/Sevarog.Sevarog'"));
+	static ConstructorHelpers::FObjectFinder<USkeletalMesh>King(TEXT("SkeletalMesh'/Game/ParagonSevarog/Characters/Heroes/Sevarog/Meshes/Sevarog.Sevarog'"));
+	static ConstructorHelpers::FObjectFinder<USkeletalMesh>Knight(TEXT("SkeletalMesh'/Game/ParagonSevarog/Characters/Heroes/Sevarog/Meshes/Sevarog.Sevarog'"));
 	PawnMesh = Pawn.Object;
 	CastleMesh = Castle.Object;
 	BishopMesh = Bishop.Object;
@@ -52,8 +52,6 @@ APiece::APiece()
 void APiece::BeginPlay()
 {
 	Super::BeginPlay();
-
-	BoxComponent->OnComponentBeginOverlap.AddDynamic(this, &APiece::BeginOverlap);
 }
 
 // Called every frame
@@ -88,7 +86,7 @@ void APiece::ChangeMesh(EPieceType Piece)
 {
 	if (Piece == EPieceType::PT_Pawn)
 	{
-		StaticMeshComponent->SetStaticMesh(PawnMesh);
+		SkeletalMeshComponent->SetSkeletalMesh(PawnMesh);
 	}
 	if (Piece == EPieceType::PT_Castle)
 	{
@@ -100,26 +98,16 @@ void APiece::ChangeMesh(EPieceType Piece)
 	}
 	if (Piece == EPieceType::PT_Queen)
 	{
-		StaticMeshComponent->SetStaticMesh(QueenMesh);
+		SkeletalMeshComponent->SetSkeletalMesh(QueenMesh);
 	}
 	if (Piece == EPieceType::PT_King)
 	{
-		StaticMeshComponent->SetStaticMesh(KingMesh);
+		SkeletalMeshComponent->SetSkeletalMesh(KingMesh);
 	}
 	if (Piece == EPieceType::PT_Knight)
 	{
-		StaticMeshComponent->SetStaticMesh(KnightMesh);
+		SkeletalMeshComponent->SetSkeletalMesh(KnightMesh);
 	}
-}
-
-void APiece::BeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp,
-                          int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
-{
-	MovementComponent = OtherActor->FindComponentByClass<UPieceMovementComponent>();
-
-	if(MovementComponent && MovementComponent->GetColour() != FindComponentByClass<UPieceMovementComponent>()->GetColour())
-		OtherActor->Destroy();
-	
 }
 
 bool APiece::GetFirstMove()

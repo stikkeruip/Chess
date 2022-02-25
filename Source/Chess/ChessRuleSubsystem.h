@@ -67,6 +67,14 @@ public:
 
 	AChessPlayer* ChessPlayer;
 
+	void SetXLimitMax(float pos) { XLimitMax = pos; }
+	
+	void SetXLimitMin(float pos) { XLimitMin = pos; }
+	
+	void SetYLimitMax(float pos) { YLimitMax = pos; }
+	
+	void SetYLimitMin(float pos) { YLimitMin = pos; }
+
 private:
 	
 	UInstructionUserWidget* InstructionWidget = nullptr;
@@ -74,5 +82,13 @@ private:
 	std::vector<UPieceMovementComponent*> Pieces;
 
 	EColour CurrentColour = EColour::C_White;
+
+	float XLimitMax = 0;
+	
+	float XLimitMin = 0;
+	
+	float YLimitMax = 0;
+	
+	float YLimitMin = 0;	
 };
 

@@ -60,8 +60,8 @@ class CHESS_API AChessController : public APlayerController
 	float XKingDirStraight[4] = {0.f, 0.f, -100.f, 100};
 	float YKingDirStraight[4] = {100.f, -100.f, 0.f, 0.f};
 	
-	float XStraightOffset [4] = {0.f, 0.f, 60.f, -60.f};
-	float YStraightOffset [4] = {60.f, -60.f, 0.f, 0.f};
+	float XStraightOffset [4] = {0.f, 0.f, 70.f, -70.f};
+	float YStraightOffset [4] = {70.f, -70.f, 0.f, 0.f};
 	
 	float XDiagonalOffset [4] = {60.f, 60.f, -60.f, -60.f};
 	float YDiagonalOffset [4] = {60.f, -60.f, 60.f, -60.f};
@@ -71,6 +71,8 @@ class CHESS_API AChessController : public APlayerController
 
 	int StepOffsetDiagonalX[4] = {GRID_SIZE, GRID_SIZE, -GRID_SIZE, -GRID_SIZE};
 	int StepOffsetDiagonalY[4] = {GRID_SIZE, -GRID_SIZE, GRID_SIZE, -GRID_SIZE};
+
+	TArray<FVector> XYLimits;
 
 	TArray<AActor*> SpawnedActors;
 

@@ -1,6 +1,8 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #include "ChessController.h"
+
+#include "CollisionDebugDrawingPublic.h"
 #include "DrawDebugHelpers.h"
 
 
@@ -53,14 +55,17 @@ void AChessController::DisplayMoves(FVector StartLocation, EPieceType PieceType,
 		for (int DirectionIndex = 0; DirectionIndex < DirectionNum; DirectionIndex++)
 		{
 			GetWorld()->LineTraceSingleByChannel(
-				HitResult, StartLocation + FVector(XStraightOffset[DirectionIndex], YStraightOffset[DirectionIndex], 20.f),
-				StartLocation + FVector(XStraightDir[DirectionIndex], YStraightDir[DirectionIndex], 20.f), ECC_Pawn, TraceParams);
+				HitResult, StartLocation + FVector(XStraightOffset[DirectionIndex], YStraightOffset[DirectionIndex], 30.f),
+				StartLocation + FVector(XStraightDir[DirectionIndex], YStraightDir[DirectionIndex], 30.f), ECC_Pawn, TraceParams);
+			UE_LOG(LogTemp, Warning, TEXT("%i"), DirectionIndex);
 			if (HitResult.GetActor() && HitResult.GetActor() != PieceBeingMoved)
 			{
-				FVector TargetPosition = HitResult.GetActor()->GetActorLocation();
+				FVector ActorHitPosition = HitResult.GetActor()->GetActorLocation();
+				UE_LOG(LogTemp, Warning, TEXT("%s"), *ActorHitPosition.ToString());
+				XYLimits.Add(ActorHitPosition);
 				FVector DeltaVector = FVector(StepOffsetStraightX[DirectionIndex], StepOffsetStraightY[DirectionIndex], 0.0f);
 				FVector FirstCheckPosition = StartLocation + DeltaVector;
-				for (FVector CurrentPosition = FirstCheckPosition; !IsInSameGrid(CurrentPosition, TargetPosition); CurrentPosition += DeltaVector)
+				for (FVector CurrentPosition = FirstCheckPosition; !IsInSameGrid(CurrentPosition, ActorHitPosition); CurrentPosition += DeltaVector)
 				{
 					AActor* SpawnedActor = GetWorld()->SpawnActor(ActorToSpawn, &CurrentPosition, &Rotation);
 					SpawnedActors.Add(SpawnedActor);
@@ -175,6 +180,10 @@ void AChessController::DisplayMoves(FVector StartLocation, EPieceType PieceType,
 			}
 		}
 	}
+	ChessRuleSubsystem->SetYLimitMax(XYLimits[0].Y); 
+	ChessRuleSubsystem->SetYLimitMin(XYLimits[1].Y); 
+	ChessRuleSubsystem->SetXLimitMin(XYLimits[2].X); 
+	ChessRuleSubsystem->SetXLimitMax(XYLimits[3].X); 
 }
 
 float AChessController::PositionOnDirection(FVector Vector, int DirectionIndex)

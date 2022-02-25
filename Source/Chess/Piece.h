@@ -24,9 +24,6 @@ protected:
 	UPROPERTY(EditInstanceOnly, BlueprintReadOnly)
 	USkeletalMeshComponent* SkeletalMeshComponent;
 
-	UPROPERTY(EditInstanceOnly, BlueprintReadOnly)
-	UStaticMeshComponent* StaticMeshComponent;
-
 	UPROPERTY(EditAnywhere)
 	UBoxComponent* BoxComponent;
 
@@ -38,12 +35,12 @@ protected:
 	UMaterialInterface* MaterialB_P;
 	UMaterialInterface* MaterialW_P;
 	
-	UStaticMesh* PawnMesh;
+	USkeletalMesh* PawnMesh;
 	USkeletalMesh* CastleMesh;
 	USkeletalMesh* BishopMesh;
-	UStaticMesh* QueenMesh;
-	UStaticMesh* KingMesh;
-	UStaticMesh* KnightMesh;
+	USkeletalMesh* QueenMesh;
+	USkeletalMesh* KingMesh;
+	USkeletalMesh* KnightMesh;
 
 	
 
@@ -56,12 +53,4 @@ public:
 	void ChangeMesh(EPieceType Piece);
 
 	bool GetFirstMove();
-
-	UFUNCTION( )
-	void BeginOverlap(UPrimitiveComponent* OverlappedComponent, 
-					  AActor* OtherActor, 
-					  UPrimitiveComponent* OtherComp, 
-					  int32 OtherBodyIndex, 
-					  bool bFromSweep, 
-					  const FHitResult &SweepResult );
 };

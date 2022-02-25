@@ -7,6 +7,7 @@
 #include "Blueprint/UserWidget.h"
 #include "Kismet/GameplayStatics.h"
 #include "ChessPlayer.h"
+#include "ChessUtils.h"
 
 void UChessRuleSubsystem::CreateInstructionWidget(TSubclassOf<UUserWidget> InstructionWidgetClass)
 {
@@ -51,19 +52,31 @@ void UChessRuleSubsystem::EndTurn(EColour Colour)
 
 bool UChessRuleSubsystem::CheckMovementValid(EPieceType PieceType, EColour Colour, float F_X, float F_Y, FVector CurrentGrid)
 {
-	int CurrentGridX = round(abs(CurrentGrid.X)/100);
-	int CurrentGridY = round(abs(CurrentGrid.Y)/100);
+	int CurrentGridX = ChessUtils::RoundToGrid(CurrentGrid.X);
+	int CurrentGridY = ChessUtils::RoundToGrid(CurrentGrid.Y);
 	
-	F_X = round(abs(F_X)/100);
-	F_Y = round(abs(F_Y)/100);
+	F_X = ChessUtils::RoundToGrid(F_X);
+	F_Y = ChessUtils::RoundToGrid(F_Y);
+
+	if(XLimitMax < 0.f)
+	{
+		XLimitMax = ChessUtils::RoundToGrid(XLimitMax);
+		UE_LOG(LogTemp, Warning, TEXT("%f"), XLimitMax)
+		XLimitMin = ChessUtils::RoundToGrid(XLimitMin);
+		UE_LOG(LogTemp, Warning, TEXT("%f"), XLimitMin)
+		YLimitMax = ChessUtils::RoundToGrid(YLimitMax);
+		UE_LOG(LogTemp, Warning, TEXT("%f"), YLimitMax)
+		YLimitMin = ChessUtils::RoundToGrid(YLimitMin);
+		UE_LOG(LogTemp, Warning, TEXT("%f"), YLimitMin)
+	}
 
 	if(Colour == CurrentColour)
 	{
-		if (PieceType == EPieceType::PT_Pawn && F_X == CurrentGridX && (F_Y == CurrentGridY + 1 && Colour == EColour::C_White || F_Y == CurrentGridY - 1 && Colour == EColour::C_Black))
+		if (PieceType == EPieceType::PT_Pawn && F_X == CurrentGridX && ((F_Y == CurrentGridY + 1 || F_Y == CurrentGridY + 2) && Colour == EColour::C_White || (F_Y == CurrentGridY - 1 || F_Y == CurrentGridY - 2) && Colour == EColour::C_Black))
 		{
 			return true;
 		}
-		if ((PieceType == EPieceType::PT_Castle || PieceType == EPieceType::PT_Queen) && (F_X >= 1 && F_X <= 8 && F_Y == CurrentGridY || F_Y >= 1 && F_Y <= 8 && F_X == CurrentGridX))
+		if ((PieceType == EPieceType::PT_Castle || PieceType == EPieceType::PT_Queen) && (F_X >= XLimitMin && F_X <= XLimitMax && F_Y == CurrentGridY || F_Y >= YLimitMin && F_Y <= YLimitMax && F_X == CurrentGridX))
 		{
 			return true;
 		}
@@ -75,7 +88,10 @@ bool UChessRuleSubsystem::CheckMovementValid(EPieceType PieceType, EColour Colou
 		{
 			return true;
 		}
-		if (PieceType == EPieceType::PT_Knight)
+		if (PieceType == EPieceType::PT_Knight && ((F_X == CurrentGridX + 1 || F_X == CurrentGridX - 1) && (F_Y == CurrentGridY + 2 || F_Y == CurrentGridY - 2) || (F_X == CurrentGridX + 2 || F_X == CurrentGridX - 2) && (F_Y == CurrentGridY + 1 || F_Y == CurrentGridY - 1)))
+		{
+			return true;
+		}
 		
 
 		return false;
