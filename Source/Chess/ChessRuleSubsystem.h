@@ -53,7 +53,7 @@ public:
 	
 	void DisplayInstructionWidget();
 	
-	void InstructionCompleted(EColour Colour, EPieceState PieceState);
+	void InstructionCompleted();
 
 	bool CheckMovementValid(EPieceType PieceType, EColour Colour, float F_X, float F_Y, FVector CurrentGrid);
 

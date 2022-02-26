@@ -21,7 +21,7 @@ void UChessRuleSubsystem::DisplayInstructionWidget()
 	InstructionWidget->AddToViewport();
 }
 
-void UChessRuleSubsystem::InstructionCompleted(EColour Colour, EPieceState PieceState)
+void UChessRuleSubsystem::InstructionCompleted()
 {
 	if(CurrentColour == EColour::C_Black)
 	{

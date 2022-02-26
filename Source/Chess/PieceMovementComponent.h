@@ -47,6 +47,9 @@ protected:
 	UPROPERTY(EditAnywhere)
 	EPieceType Piece_Type;
 
+	UPROPERTY(EditAnywhere)
+	UParticleSystem* DestroyedParticleSystem;
+
 	EPieceState PieceState = static_cast<EPieceState>(0);
 
 	UChessRuleSubsystem* ChessRuleSubsystem = nullptr;
@@ -71,7 +74,7 @@ public:
 	void SetAttacking(bool Attacking) { bAttacking = Attacking; bGoingToAttack = false; bMoving = true;}
 
 	UFUNCTION(BlueprintCallable)
-	void DestroyAttackedActor() { AttackedActor->Destroy(); }
+	void DestroyAttackedActor();
 
 	bool GetFirstMove() { return bFirstMove; }
 	
@@ -89,7 +92,7 @@ public:
 
 	FVector GetGridPosition();
 
-	DECLARE_EVENT_TwoParams(UPieceMovementComponent, EPieceStateChange, EColour Colour, EPieceState PieceState);
+	DECLARE_EVENT(UPieceMovementComponent, EPieceStateChange);
 	EPieceStateChange& OnStateChanged() { return PieceStateChange; }
 	
 	EPieceStateChange PieceStateChange;

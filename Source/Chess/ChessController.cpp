@@ -3,7 +3,6 @@
 #include "ChessController.h"
 
 #include "CollisionDebugDrawingPublic.h"
-#include "DrawDebugHelpers.h"
 
 
 void AChessController::BeginPlay()

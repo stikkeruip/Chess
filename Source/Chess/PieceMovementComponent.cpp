@@ -2,6 +2,7 @@
 
 
 #include "PieceMovementComponent.h"
+#include "Kismet/GameplayStatics.h"
 
 // Sets default values for this component's properties
 UPieceMovementComponent::UPieceMovementComponent()
@@ -66,15 +67,20 @@ void UPieceMovementComponent::TickComponent(float DeltaTime, ELevelTick TickType
 			}
 			else
 			{
-				UE_LOG(LogTemp, Warning, TEXT("End moving"));
 				InitialPosition = GetOwner()->GetActorLocation();
 				bMoving = false;
 				PieceState = EPieceState::PS_Unselected;
-				PieceStateChange.Broadcast(Colour, PieceState);
+				PieceStateChange.Broadcast();
 				ChessRuleSubsystem->EndTurn(Colour);
 			}
 		}
 	}
+}
+
+void UPieceMovementComponent::DestroyAttackedActor()
+{
+	AttackedActor->Destroy();
+	UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), DestroyedParticleSystem, AttackedActor->GetActorLocation());
 }
 
 bool UPieceMovementComponent::CanAttack()
@@ -95,7 +101,7 @@ bool UPieceMovementComponent::SetEndPosition(FVector Pos)
 void UPieceMovementComponent::SetMoved()
 {
 	PieceState = EPieceState::PS_Moving;
-	PieceStateChange.Broadcast(Colour, PieceState);
+	PieceStateChange.Broadcast();
 	
 	bMoving = true;
 	bFirstMove = false;
@@ -115,7 +121,7 @@ void UPieceMovementComponent::Attack(UPieceMovementComponent* PieceMovementCompo
 void UPieceMovementComponent::Selected()
 {
 	PieceState = EPieceState::PS_Selected;
-	PieceStateChange.Broadcast(Colour, PieceState);
+	PieceStateChange.Broadcast();
 }
 
 FVector UPieceMovementComponent::GetGridPosition()
