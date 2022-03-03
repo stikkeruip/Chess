@@ -8,6 +8,8 @@
 #include "Kismet/GameplayStatics.h"
 #include "ChessPlayer.h"
 #include "ChessUtils.h"
+#include "EngineUtils.h"
+
 
 void UChessRuleSubsystem::CreateInstructionWidget(TSubclassOf<UUserWidget> InstructionWidgetClass)
 {
@@ -26,14 +28,32 @@ void UChessRuleSubsystem::InstructionCompleted()
 	if(CurrentColour == EColour::C_Black)
 	{
 		InstructionWidget->SetInstruction(TEXT("Black Turn"));
-		UE_LOG(LogTemp, Warning, TEXT("black"));
 	}
 	if(CurrentColour == EColour::C_White)
 	{
 		InstructionWidget->SetInstruction(TEXT("White Turn"));
-		UE_LOG(LogTemp, Warning, TEXT("white"));
 	}
 }
+
+void UChessRuleSubsystem::EndGame()
+{
+	TArray<EColour> AliveColours;
+	UPieceMovementComponent* CurrentPieceMovementComponent;
+
+	for (TActorIterator<APiece> PieceItr (GetWorld()); PieceItr; ++PieceItr)
+	{
+		APiece* CurrentPiece = *PieceItr;
+		CurrentPieceMovementComponent = ChessUtils::GetPieceMovementComponent(CurrentPiece);
+		
+		if(AliveColours.Num() == 0 || CurrentPieceMovementComponent->GetColour() != AliveColours[0])
+			AliveColours.Add(CurrentPieceMovementComponent->GetColour()); 
+	}
+	UE_LOG(LogTemp, Warning, TEXT("%i"), AliveColours.Num())
+
+	if(AliveColours.Num() == 1)
+		UKismetSystemLibrary::QuitGame(GetWorld(), UGameplayStatics::GetPlayerController(GetWorld(), 0), EQuitPreference::Quit, true);
+}
+
 
 void UChessRuleSubsystem::EndTurn(EColour Colour)
 {
@@ -61,13 +81,9 @@ bool UChessRuleSubsystem::CheckMovementValid(EPieceType PieceType, EColour Colou
 	if(XLimitMax < 0.f)
 	{
 		XLimitMax = ChessUtils::RoundToGrid(XLimitMax);
-		UE_LOG(LogTemp, Warning, TEXT("%f"), XLimitMax)
 		XLimitMin = ChessUtils::RoundToGrid(XLimitMin);
-		UE_LOG(LogTemp, Warning, TEXT("%f"), XLimitMin)
 		YLimitMax = ChessUtils::RoundToGrid(YLimitMax);
-		UE_LOG(LogTemp, Warning, TEXT("%f"), YLimitMax)
 		YLimitMin = ChessUtils::RoundToGrid(YLimitMin);
-		UE_LOG(LogTemp, Warning, TEXT("%f"), YLimitMin)
 	}
 
 	if(Colour == CurrentColour)
@@ -111,3 +127,5 @@ void UChessRuleSubsystem::RemovePiece(UPieceMovementComponent* Piece)
 
 	Pieces.erase(i);
 }
+
+

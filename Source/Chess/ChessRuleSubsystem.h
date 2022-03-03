@@ -55,6 +55,8 @@ public:
 	
 	void InstructionCompleted();
 
+	void EndGame();
+
 	bool CheckMovementValid(EPieceType PieceType, EColour Colour, float F_X, float F_Y, FVector CurrentGrid);
 
 	void AddPiece(UPieceMovementComponent* Piece);

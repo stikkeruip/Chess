@@ -56,11 +56,9 @@ void AChessController::DisplayMoves(FVector StartLocation, EPieceType PieceType,
 			GetWorld()->LineTraceSingleByChannel(
 				HitResult, StartLocation + FVector(XStraightOffset[DirectionIndex], YStraightOffset[DirectionIndex], 30.f),
 				StartLocation + FVector(XStraightDir[DirectionIndex], YStraightDir[DirectionIndex], 30.f), ECC_Pawn, TraceParams);
-			UE_LOG(LogTemp, Warning, TEXT("%i"), DirectionIndex);
 			if (HitResult.GetActor() && HitResult.GetActor() != PieceBeingMoved)
 			{
 				FVector ActorHitPosition = HitResult.GetActor()->GetActorLocation();
-				UE_LOG(LogTemp, Warning, TEXT("%s"), *ActorHitPosition.ToString());
 				XYLimits.Add(ActorHitPosition);
 				FVector DeltaVector = FVector(StepOffsetStraightX[DirectionIndex], StepOffsetStraightY[DirectionIndex], 0.0f);
 				FVector FirstCheckPosition = StartLocation + DeltaVector;

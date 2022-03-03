@@ -80,6 +80,7 @@ void UPieceMovementComponent::TickComponent(float DeltaTime, ELevelTick TickType
 void UPieceMovementComponent::DestroyAttackedActor()
 {
 	AttackedActor->Destroy();
+	ChessRuleSubsystem->EndGame();
 	UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), DestroyedParticleSystem, AttackedActor->GetActorLocation());
 }
 
@@ -133,7 +134,6 @@ void UPieceMovementComponent::PostEditChangeProperty(FPropertyChangedEvent& Prop
 {
 	Super::PostEditChangeProperty(PropertyChangedEvent);
 
-	UE_LOG(LogTemp, Warning, TEXT("%s"), *PropertyChangedEvent.GetPropertyName().ToString());
 
 	if(PropertyChangedEvent.GetPropertyName().ToString().Compare("Colour") == 0)
 	{

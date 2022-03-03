@@ -83,7 +83,6 @@ void AChessPlayer::CameraWhite()
 	bMoved = true;
 	TimePassed = 0;
 
-	UE_LOG(LogTemp, Warning, TEXT("White Camera"));
 }
 
 void AChessPlayer::CameraBlack()
@@ -94,6 +93,5 @@ void AChessPlayer::CameraBlack()
 	bMoved = true;
 	TimePassed = 0;
 
-	UE_LOG(LogTemp, Warning, TEXT("Black Camera"));
 }
 
