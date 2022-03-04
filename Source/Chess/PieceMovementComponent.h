@@ -65,10 +65,10 @@ public:
 	bool SetEndPosition(FVector Pos);
 
 	UFUNCTION(BlueprintCallable)
-	bool GetMoved() { return bMoving; }
+	bool IsMoving() { return bMoving; }
 
 	UFUNCTION(BlueprintCallable)
-	bool GetAttacking() { return bAttacking; }
+	bool IsAttacking() { return bAttacking; }
 
 	UFUNCTION(BlueprintCallable)
 	void SetAttacking(bool Attacking) { bAttacking = Attacking; bGoingToAttack = false; bMoving = true;}
@@ -82,6 +82,7 @@ public:
 
 	EPieceType GetPieceType() { return Piece_Type; }
 
+	UFUNCTION(BlueprintCallable)
 	void SetMoved();
 	
 	void Selected();

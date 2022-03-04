@@ -17,6 +17,8 @@ void AChessGameModeBase::StartPlay()
 		ChessRuleSubsystem->CreateInstructionWidget(InstructionWidgetClass);
 		ChessRuleSubsystem->DisplayInstructionWidget();
 	}
+
+	
 }
 
 

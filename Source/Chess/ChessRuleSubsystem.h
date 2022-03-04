@@ -6,6 +6,8 @@
 #include "InstructionUserWidget.h"
 #include "Subsystems/WorldSubsystem.h"
 #include <vector>
+
+#include "ChessGameModeBase.h"
 #include "GameFramework/GameModeBase.h"
 #include "ChessRuleSubsystem.generated.h"
 
@@ -54,7 +56,7 @@ public:
 	void DisplayInstructionWidget();
 	
 	void InstructionCompleted();
-
+	
 	void EndGame();
 
 	bool CheckMovementValid(EPieceType PieceType, EColour Colour, float F_X, float F_Y, FVector CurrentGrid);

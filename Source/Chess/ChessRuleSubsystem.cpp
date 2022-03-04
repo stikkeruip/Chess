@@ -51,7 +51,13 @@ void UChessRuleSubsystem::EndGame()
 	UE_LOG(LogTemp, Warning, TEXT("%i"), AliveColours.Num())
 
 	if(AliveColours.Num() == 1)
-		UKismetSystemLibrary::QuitGame(GetWorld(), UGameplayStatics::GetPlayerController(GetWorld(), 0), EQuitPreference::Quit, true);
+	{
+		AChessGameModeBase* ChessGameModeBase = Cast<AChessGameModeBase>(UGameplayStatics::GetGameMode(GetWorld()));
+		ChessGameModeBase->GameEndedEvent();
+	}
+		
+		
+		
 }
 
 

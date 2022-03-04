@@ -82,6 +82,9 @@ void UPieceMovementComponent::DestroyAttackedActor()
 	AttackedActor->Destroy();
 	ChessRuleSubsystem->EndGame();
 	UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), DestroyedParticleSystem, AttackedActor->GetActorLocation());
+	bMoving = true;
+	bAttacking = false;
+	InitialPosition = GetOwner()->GetActorLocation();
 }
 
 bool UPieceMovementComponent::CanAttack()
@@ -107,6 +110,7 @@ void UPieceMovementComponent::SetMoved()
 	bMoving = true;
 	bFirstMove = false;
 	TimePassed = 0;
+	TimeToMove = FVector::DistXY(InitialPosition, EndPosition) * 0.015f;
 }
 
 void UPieceMovementComponent::Attack(UPieceMovementComponent* PieceMovementComponent)

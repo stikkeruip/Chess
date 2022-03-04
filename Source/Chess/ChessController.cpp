@@ -59,7 +59,7 @@ void AChessController::DisplayMoves(FVector StartLocation, EPieceType PieceType,
 			if (HitResult.GetActor() && HitResult.GetActor() != PieceBeingMoved)
 			{
 				FVector ActorHitPosition = HitResult.GetActor()->GetActorLocation();
-				XYLimits.Add(ActorHitPosition);
+				XYLimits[DirectionIndex] = ActorHitPosition;
 				FVector DeltaVector = FVector(StepOffsetStraightX[DirectionIndex], StepOffsetStraightY[DirectionIndex], 0.0f);
 				FVector FirstCheckPosition = StartLocation + DeltaVector;
 				for (FVector CurrentPosition = FirstCheckPosition; !IsInSameGrid(CurrentPosition, ActorHitPosition); CurrentPosition += DeltaVector)
@@ -203,7 +203,7 @@ void AChessController::OnMouseClick()
 	FHitResult HitResult;
 	FCollisionQueryParams TraceParams;
 	
-	if (GetHitResultUnderCursor(ECC_Pawn, true, HitResult) && (!Piece || !Piece->GetMoved()))
+	if (GetHitResultUnderCursor(ECC_Pawn, true, HitResult) && (!Piece || !Piece->IsMoving() || !Piece->IsAttacking()))
 	{
 		if(HitResult.GetActor())
 		{

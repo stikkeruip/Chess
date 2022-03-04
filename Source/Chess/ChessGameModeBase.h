@@ -15,7 +15,11 @@ class CHESS_API AChessGameModeBase : public AGameModeBase
 	GENERATED_BODY()
 
 	virtual void StartPlay() override;
-
+	
 	UPROPERTY(EditDefaultsOnly)
-		TSubclassOf<UUserWidget>InstructionWidgetClass;
+	TSubclassOf<UUserWidget>InstructionWidgetClass;
+
+public:
+	UFUNCTION(BlueprintImplementableEvent)
+	void GameEndedEvent();
 };
