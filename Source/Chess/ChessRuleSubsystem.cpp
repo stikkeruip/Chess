@@ -130,8 +130,10 @@ void UChessRuleSubsystem::AddPiece(UPieceMovementComponent* Piece)
 void UChessRuleSubsystem::RemovePiece(UPieceMovementComponent* Piece)
 {
 	auto i = std::find(Pieces.begin(), Pieces.end(), Piece);
-
-	Pieces.erase(i);
+	if(i != Pieces.end())
+	{
+		Pieces.erase(i);	
+	}
 }
 
 
